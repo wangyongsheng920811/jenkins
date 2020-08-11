@@ -1,0 +1,4 @@
+['elemeter_charge_query-S-全部参数', {'trade_num': 'test', 'serial_no': '18092215463198385'}]
+['elemeter_charge_query-S-缺失trade_num', {'serial_no': '18092215463198385'}]
+['elemeter_charge_query-S-缺失serial_no', {'trade_num': 'test'}]
+['elemeter_charge_query-S-缺失全部非必须', {}]

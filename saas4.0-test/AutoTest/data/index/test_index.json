@@ -1,0 +1,12 @@
+{
+    "test_001_bill30day": {
+        "path": "/v1/merchant/home/bill30day",
+        
+        "test_common": {
+            "desc": "30天内账单等",
+            "method": "get",
+            "check_res_code": "00",
+            "check_res_data": "res.json().get('data') != None"
+        }
+    }
+}

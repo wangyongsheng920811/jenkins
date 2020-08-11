@@ -1,0 +1,4 @@
+['watermeter_charge_reset-F-´íÎóÔªËØuuid=xxx', {'uuid': 'xxx', 'meter_type': 1, 'room_id': '5b9f8ae2d7cf8916add1b89d'}]
+['watermeter_charge_reset-F-´íÎóÔªËØmeter_type=0', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'meter_type': 0, 'room_id': '5b9f8ae2d7cf8916add1b89d'}]
+['watermeter_charge_reset-F-´íÎóÔªËØmeter_type=xxx', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'meter_type': 'xxx', 'room_id': '5b9f8ae2d7cf8916add1b89d'}]
+['watermeter_charge_reset-F-´íÎóÔªËØroom_id=xxx', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'meter_type': 1, 'room_id': 'xxx'}]

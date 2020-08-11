@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  event:
+    image: "test-docker-hub.dding.net/saas/queue-service:API_TAG"
+    environment:
+      SERVICE_TYPE: "event"
+      NODE_CONFIG_ENV: "config.local"
+      BRANCH_NAME: API_TAG
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: "121.42.140.86:24224"
+        tag: "{{.ImageName}}"
+        fluentd-async-connect: "true"
+    dns:
+      - 10.202.72.116
+      - 10.202.72.118
+
+  service:
+    image: "test-docker-hub.dding.net/saas/queue-service:API_TAG"
+    environment:
+      SERVICE_TYPE: "event"
+      NODE_CONFIG_ENV: "config.local"
+      BRANCH_NAME: API_TAG
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: "121.42.140.86:24224"
+        tag: "{{.ImageName}}"
+        fluentd-async-connect: "true"
+    dns:
+      - 10.202.72.116
+      - 10.202.72.118

@@ -1,0 +1,5 @@
+['update_watermeter_overdraft-S-全部参数', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'meter_type': 1, 'overdraft': 1000}]
+['update_watermeter_overdraft-S-缺失uuid', {'room_id': '5b9f8ae2d7cf8916add1b89d', 'meter_type': 1, 'overdraft': 1000}]
+['update_watermeter_overdraft-S-缺失room_id', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'meter_type': 1, 'overdraft': 1000}]
+['update_watermeter_overdraft-S-缺失meter_type', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'overdraft': 1000}]
+['update_watermeter_overdraft-S-缺失全部非必须', {'overdraft': 1000}]

@@ -1,0 +1,5 @@
+['get_home_info-S-全部参数', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'uuid': '3320e79de87067ce88e40724e5728ead', 'manufactory': 'ym'}]
+['get_home_info-S-缺失home_id', {'uuid': '3320e79de87067ce88e40724e5728ead', 'manufactory': 'ym'}]
+['get_home_info-S-缺失uuid', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'manufactory': 'ym'}]
+['get_home_info-S-缺失manufactory', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'uuid': '3320e79de87067ce88e40724e5728ead'}]
+['get_home_info-S-缺失全部非必须', {}]

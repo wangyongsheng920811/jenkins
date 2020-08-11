@@ -1,0 +1,5 @@
+['update_home-S-全部参数', {'home_id': '5b9fa91fe6ad2216b722fa03', 'location': '天堂', 'home_name': 'OpenAPI2', 'description': '地狱天堂'}]
+['update_home-S-缺失location', {'home_id': '5b9fa91fe6ad2216b722fa03', 'home_name': 'OpenAPI2', 'description': '地狱天堂'}]
+['update_home-S-缺失home_name', {'home_id': '5b9fa91fe6ad2216b722fa03', 'location': '天堂', 'description': '地狱天堂'}]
+['update_home-S-缺失description', {'home_id': '5b9fa91fe6ad2216b722fa03', 'location': '天堂', 'home_name': 'OpenAPI2'}]
+['update_home-S-缺失全部非必须', {'home_id': '5b9fa91fe6ad2216b722fa03'}]

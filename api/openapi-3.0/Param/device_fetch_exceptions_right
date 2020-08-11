@@ -1,0 +1,6 @@
+['device_fetch_exceptions-S-全部参数', {'uuid': '43edb9bf9277c474eb670829105a017e', 'offset': 0, 'count': 20, 'start_time': 1540370879000, 'end_time': 1540457279000}]
+['device_fetch_exceptions-S-缺失offset', {'uuid': '43edb9bf9277c474eb670829105a017e', 'count': 20, 'start_time': 1540370879000, 'end_time': 1540457279000}]
+['device_fetch_exceptions-S-缺失count', {'uuid': '43edb9bf9277c474eb670829105a017e', 'offset': 0, 'start_time': 1540370879000, 'end_time': 1540457279000}]
+['device_fetch_exceptions-S-缺失start_time', {'uuid': '43edb9bf9277c474eb670829105a017e', 'offset': 0, 'count': 20, 'end_time': 1540457279000}]
+['device_fetch_exceptions-S-缺失end_time', {'uuid': '43edb9bf9277c474eb670829105a017e', 'offset': 0, 'count': 20, 'start_time': 1540370879000}]
+['device_fetch_exceptions-S-缺失全部非必须', {'uuid': '43edb9bf9277c474eb670829105a017e'}]

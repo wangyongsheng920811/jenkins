@@ -1,0 +1,7 @@
+['elemeter_set_eleprice_way-F-È±Ê§home_id', {'room_id': '5b9f8ae2d7cf8916add1b89e', 'uuid': '3320e79de87067ce88e40724e5728ead', 'eleprice_way': 1}]
+['elemeter_set_eleprice_way-F-È±Ê§eleprice_way', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'room_id': '5b9f8ae2d7cf8916add1b89e', 'uuid': '3320e79de87067ce88e40724e5728ead'}]
+['elemeter_set_eleprice_way-F-´íÎóÔªËØhome_id=xxx', {'home_id': 'xxx', 'room_id': '5b9f8ae2d7cf8916add1b89e', 'uuid': '3320e79de87067ce88e40724e5728ead', 'eleprice_way': 1}]
+['elemeter_set_eleprice_way-F-´íÎóÔªËØroom_id=xxx', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'room_id': 'xxx', 'uuid': '3320e79de87067ce88e40724e5728ead', 'eleprice_way': 1}]
+['elemeter_set_eleprice_way-F-´íÎóÔªËØuuid=xxx', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'room_id': '5b9f8ae2d7cf8916add1b89e', 'uuid': 'xxx', 'eleprice_way': 1}]
+['elemeter_set_eleprice_way-F-´íÎóÔªËØeleprice=4', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'room_id': '5b9f8ae2d7cf8916add1b89e', 'uuid': '3320e79de87067ce88e40724e5728ead', 'eleprice_way': 1, 'eleprice': 4}]
+['elemeter_set_eleprice_way-F-´íÎóÔªËØeleprice=xxx', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'room_id': '5b9f8ae2d7cf8916add1b89e', 'uuid': '3320e79de87067ce88e40724e5728ead', 'eleprice_way': 1, 'eleprice': 'xxx'}]

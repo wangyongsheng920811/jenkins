@@ -1,0 +1,4 @@
+['search_home_info-F-错误元素offset=-1', {'home_name': 'OpenAPI', 'city': '北京市', 'zone': '东城区', 'block': '测试', 'location': '测试', 'offset': -1, 'count': 20}]
+['search_home_info-F-错误元素offset=test', {'home_name': 'OpenAPI', 'city': '北京市', 'zone': '东城区', 'block': '测试', 'location': '测试', 'offset': 'test', 'count': 20}]
+['search_home_info-F-错误元素count=-1', {'home_name': 'OpenAPI', 'city': '北京市', 'zone': '东城区', 'block': '测试', 'location': '测试', 'offset': 0, 'count': -1}]
+['search_home_info-F-错误元素count=test', {'home_name': 'OpenAPI', 'city': '北京市', 'zone': '东城区', 'block': '测试', 'location': '测试', 'offset': 0, 'count': 'test'}]

@@ -1,0 +1,4 @@
+['get_elemeter_info-F-È±Ê§home_id', {'room_id': '5b9f8ae2d7cf8916add1b89e', 'uuid': '3320e79de87067ce88e40724e5728ead'}]
+['get_elemeter_info-F-´íÎóÔªËØhome_id=xxx', {'home_id': 'xxx', 'room_id': '5b9f8ae2d7cf8916add1b89e', 'uuid': '3320e79de87067ce88e40724e5728ead'}]
+['get_elemeter_info-F-´íÎóÔªËØroom_id=xxx', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'room_id': 'xxx', 'uuid': '3320e79de87067ce88e40724e5728ead'}]
+['get_elemeter_info-F-´íÎóÔªËØuuid=xxx', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'room_id': '5b9f8ae2d7cf8916add1b89e', 'uuid': 'xxx'}]

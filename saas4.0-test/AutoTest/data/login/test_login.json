@@ -1,0 +1,68 @@
+{
+    "test_001_captcha": {
+        "path": "/v1/auth/login/captcha",
+        
+        "test_common": {
+            "desc": "获取图片验证码",
+            "method": "get",
+            "check_res_code": "00",
+            "check_res_data": "res.json().get('data').get('code') != None"
+        }
+    },
+    
+    "test_002_send_sms": {
+        "path": "/v1/auth/login/sendSms",
+        
+        "test_common_1": {
+            "desc": "发送短信验证码",
+            "method": "post",
+            "params": {
+                "phone": "18640573589",
+                "imageCode": "qwer",
+                "code": "uYTkBJcDDnm3lDUlsvgWFKgaUZEKlxx1"
+            },
+            "check_res_code": "4023",
+            "check_res_data": null
+        },
+        
+        "test_common_2": {
+            "desc": "发送短信验证码接口用户未注册",
+            "method": "post",
+            "params": {
+                "phone": "18640573590",
+                "imageCode": "qwer",
+                "code": "uYTkBJcDDnm3lDUlsvgWFKgaUZEKlxx1"
+            },
+            "check_res_code": "51401",
+            "check_res_data": null
+        }
+    },
+    
+    "test_003_login_with_sms": {
+        "path": "/v1/auth/login/loginWithSms",
+        
+        "test_common": {
+            "desc": "验证码登录",
+            "method": "post",
+            "params": {
+                "phone": "18640573590",
+                "verifyCode": "123456",
+                "secretPrefix": "uYTkBJcDDnm3lDUlsvgWFKgaUZEKlxx1",
+                "from": 1
+            },
+            "check_res_code": "4023",
+            "check_res_data": null
+        }
+    },
+    
+    "test_004_logout": {
+        "path": "/v1/auth/merchant/logout",
+        
+        "test_common": {
+            "desc": "退出登录",
+            "method": "post",
+            "check_res_code": "00",
+            "check_res_data": null
+        }
+    }
+}

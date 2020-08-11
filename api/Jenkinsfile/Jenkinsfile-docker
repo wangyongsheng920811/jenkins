@@ -1,0 +1,62 @@
+pipeline
+{
+    agent { label 'master' }
+    
+    options
+    {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '100', artifactNumToKeepStr: '10', daysToKeepStr: '100', numToKeepStr: '10'))
+        disableConcurrentBuilds()
+    }
+    
+    parameters {
+        booleanParam(name: 'start_server', defaultValue: true, description: '是否启动服务，取消勾选则停止已启动分支服务')
+        gitParameter(name: 'branch', type: 'PT_BRANCH', defaultValue: 'master', useRepository: '(?!.*yaosheng).*.git')      
+    }
+
+    stages
+    {
+        stage('DownloadCode')
+        {
+            steps
+            {
+                script
+                {
+                    branch = (params.branch == "!No Git repository configured in SCM configuration") ? "master" : params.branch 
+                    imageBranch = branch[7..-1]
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'
+                    scripts.initParam()
+                    scripts.downloadCode(url, branch, "code")
+                    scripts.printColorLog("blue", "start server with command $startCommand")
+                    if(params.start_server)
+                    {
+                        sh "docker login -u tanzhiqiang -p Tanzhiqiang@2019 tt-al-harbor-in.dding.net"                    
+                        sh "JENKINS_NODE_COOKIE=dontKillMe && $startCommand "
+                        sh "docker logout tt-al-harbor-in.dding.net" 
+                    }
+                    else
+                    { 
+                        dir = env.JOB_NAME[7..-10]
+                        sh "cd $env.WORKSPACE/code/$dir && docker-compose -p $dir-$imageBranch down"
+                    }
+                }
+            }
+        }
+    }
+
+    post
+    {
+        always 
+        {
+            script
+            {
+                if(params.start_server)
+                {
+                    dir = env.JOB_NAME[7..-10]
+                    port = sh(returnStdout: true, script: "find $env.WORKSPACE/code/$dir/.env | xargs grep RUN_PORT |cut -d '=' -f 2")
+                    robotPath = "/root/.jenkins/workspace/update_ddrobot/DdRobot/Test/DdRobot.py"
+                    scripts.notifyRobot(robotPath, port)
+                }
+            }
+        }
+    }
+}

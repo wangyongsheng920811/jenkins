@@ -1,0 +1,2 @@
+['add_rooms-F-»± ßhome_id', {'rooms': [{'room_id': 'test', 'room_name': 'test', 'room_description': '≤‚ ‘', 'sp_state': '1', 'install_state': '1'}, {'dispensable': ['sp_state', 'install_state']}]}]
+['add_rooms-F-»± ßrooms', {'home_id': '5b9f8ae2d7cf8916add1b89c'}]

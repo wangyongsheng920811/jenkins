@@ -1,0 +1,74 @@
+pipeline
+{
+    agent none  
+    
+    options
+    {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '100', artifactNumToKeepStr: '10', daysToKeepStr: '100', numToKeepStr: '10'))
+        disableConcurrentBuilds()
+    }
+    parameters {
+        gitParameter name: 'branch', type: 'PT_BRANCH', defaultValue: 'develop', useRepository: '(?!.*saas4.0-test).*.git'
+    }
+
+    stages
+    {
+        stage('Build')
+        {
+            agent { label 'saas4.0-qa' }
+            
+            steps
+            {
+                script
+                {
+                    sh "cd $env.WORKSPACE/code && rm -rf target lib *.jar || echo 'no dir'"
+                    branch = (params.branch == "!No Git repository configured in SCM configuration") ? "develop" : params.branch 
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'
+                    scripts.initParam()
+                    scripts.downloadCode(url, branch, "code")
+                }
+                             
+                sh "cd $env.WORKSPACE/code && $mvnCommand"
+                stash(name: "jar", includes: "code/*.jar", allowEmpty: false )
+            }
+        }
+        
+        stage('Deploy')
+        {
+            agent { label 'saas4.0-qa' }
+            
+            steps
+            {
+                script
+                {
+                    testUrl = "git@code.dding.net:server/lease-platform/saas4.0-test.git"
+                    testBranch = "master"
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'
+                    scripts.initParam()
+                    scripts.downloadCode(testUrl, testBranch, "code")
+                    unstash("jar")
+                }
+                wrap([$class: 'BuildUser'])
+                {
+                    sh "cd $env.WORKSPACE/code/Script && JENKINS_NODE_COOKIE=dontKillMe && $deployCommand"
+                }
+            }
+        }
+    }
+    
+    post
+    {      
+        always
+        {
+            node ('saas4.0-qa')
+            {                              
+                script
+                {
+                    robotPath = "/root/jenkins/workspace/update-ddrobot-pipeline/DdRobot/Script/DdRobot.py"
+                    scripts.notifyRobot(robotPath)
+                }
+                archiveArtifacts "code/*.jar"
+            }
+        }
+    }
+}

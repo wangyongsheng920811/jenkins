@@ -1,0 +1,7 @@
+['count_watermeter_charge_record-S-È«²¿²ÎÊý', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'meter_type': 1, 'start_time': 1540370879000, 'end_time': 1540543679000}]
+['count_watermeter_charge_record-S-È±Ê§uuid', {'room_id': '5b9f8ae2d7cf8916add1b89d', 'meter_type': 1, 'start_time': 1540370879000, 'end_time': 1540543679000}]
+['count_watermeter_charge_record-S-È±Ê§room_id', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'meter_type': 1, 'start_time': 1540370879000, 'end_time': 1540543679000}]
+['count_watermeter_charge_record-S-È±Ê§meter_type', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'start_time': 1540370879000, 'end_time': 1540543679000}]
+['count_watermeter_charge_record-S-È±Ê§start_time', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'meter_type': 1, 'end_time': 1540543679000}]
+['count_watermeter_charge_record-S-È±Ê§end_time', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'meter_type': 1, 'start_time': 1540370879000}]
+['count_watermeter_charge_record-S-È±Ê§È«²¿·Ç±ØÐë', {}]

@@ -1,0 +1,4 @@
+['get_center_info-S-全部参数', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'uuid': 'e9f94c4b9902ae350b554e890718ad55'}]
+['get_center_info-S-缺失home_id', {'uuid': 'e9f94c4b9902ae350b554e890718ad55'}]
+['get_center_info-S-缺失uuid', {'home_id': '5b9f8ae2d7cf8916add1b89c'}]
+['get_center_info-S-缺失全部非必须', {}]

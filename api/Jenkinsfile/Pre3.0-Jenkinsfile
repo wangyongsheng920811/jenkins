@@ -1,0 +1,77 @@
+pipeline
+{
+    agent { label 'pre_saas' }
+    
+    options
+    {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '100', artifactNumToKeepStr: '10', daysToKeepStr: '100', numToKeepStr: '10'))
+        disableConcurrentBuilds()     
+    }
+    parameters {
+        gitParameter name: 'branch', type: 'PT_BRANCH', defaultValue: 'master', useRepository: '(?!.*yaosheng).*.git'
+    }
+
+    stages
+    {
+        stage('DownloadCode')
+        {
+            steps
+            {
+                script
+                {
+                    branch = (params.branch == "!No Git repository configured in SCM configuration") ? "master" : params.branch 
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'
+                    scripts.initParam()                    
+                    
+                    testUrl = "git@code.dding.net:yaosheng/api.git"
+                    testBranch = "master"
+                    testDir = "test"
+                    deleteDir()
+                    scripts.downloadCode(testUrl, testBranch, testDir)
+                    scripts.downloadCode(url, branch, "code")                    
+                }
+            }
+        }
+        
+        stage('Deploy')
+        {
+            steps
+            {
+                script
+                {
+                    scripts.printColorLog("blue", "start deploy")
+                    
+                    switch(env.JOB_NAME)
+                    {
+                        case "pre-saas-fe-3.0-pipeline":
+                        case "pre-saas-manager-fe-pipeline":
+                            sh ". /etc/profile.d/nodejs.sh && npm config set registry http://registry.npm.taobao.org/ && cd $env.WORKSPACE/code && JENKINS_NODE_COOKIE=dontKillMe && npm install && $startCommand"
+                            sh "ssh dingding@$ip \"cd /production/sites/;rsync -r --exclude=moniter.html --delete $deployDir/ ${deployDir}.bak/\""
+                            sh "/usr/bin/rsync -avz --exclude=moniter.html $env.WORKSPACE/code/dist/  dingding@$ip:/production/sites/$deployDir/"  
+                            break
+                        case "pre-saas-db-schema-migration-pipeline":
+                            sh ". /etc/profile.d/nodejs.sh && npm config set registry http://registry.npm.taobao.org/ && cd $env.WORKSPACE/code && JENKINS_NODE_COOKIE=dontKillMe && npm install && $startCommand"
+                            break
+                        default:
+                            sh "cd $env.WORKSPACE/test/Test && chmod 777 Deploy.sh && ./Deploy.sh $ip $env.JOB_NAME \"$startCommand\" \"$stopCommand\""
+                            break
+                    }
+                    
+                    scripts.printColorLog("blue", "end deploy")
+                }
+            }
+        }
+    }
+    
+    post
+    {            
+        always 
+        {
+            script
+            {
+                robotPath = "$env.WORKSPACE/test/Test/DdRobot.py"
+                scripts.notifyRobot(robotPath)
+            }
+        }
+    }
+}

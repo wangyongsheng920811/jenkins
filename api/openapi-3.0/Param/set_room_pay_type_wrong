@@ -1,0 +1,5 @@
+['set_room_pay_type-F-È±Ê§pay_type', {'room_id': '5b9f8ae2d7cf8916add1b89e', 'uuid': '3320e79de87067ce88e40724e5728ead', 'overdraft': 5}]
+['set_room_pay_type-F-´íÎóÔªËØroom_id=xxx', {'room_id': 'xxx', 'uuid': '3320e79de87067ce88e40724e5728ead', 'pay_type': 1, 'overdraft': 5}]
+['set_room_pay_type-F-´íÎóÔªËØuuid=xxx', {'room_id': '5b9f8ae2d7cf8916add1b89e', 'uuid': 'xxx', 'pay_type': 1, 'overdraft': 5}]
+['set_room_pay_type-F-´íÎóÔªËØpay_type=xxx', {'room_id': '5b9f8ae2d7cf8916add1b89e', 'uuid': '3320e79de87067ce88e40724e5728ead', 'pay_type': 'xxx', 'overdraft': 5}]
+['set_room_pay_type-F-´íÎóÔªËØoverdraft=xxx', {'room_id': '5b9f8ae2d7cf8916add1b89e', 'uuid': '3320e79de87067ce88e40724e5728ead', 'pay_type': 1, 'overdraft': 'xxx'}]

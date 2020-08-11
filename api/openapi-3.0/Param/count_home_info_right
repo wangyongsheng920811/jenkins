@@ -1,0 +1,7 @@
+['count_home_info-S-全部参数', {'home_name': 'OpenAPI', 'city': '北京市', 'zone': '东城区', 'block': '测试', 'location': '测试'}]
+['count_home_info-S-缺失home_name', {'city': '北京市', 'zone': '东城区', 'block': '测试', 'location': '测试'}]
+['count_home_info-S-缺失city', {'home_name': 'OpenAPI', 'zone': '东城区', 'block': '测试', 'location': '测试'}]
+['count_home_info-S-缺失zone', {'home_name': 'OpenAPI', 'city': '北京市', 'block': '测试', 'location': '测试'}]
+['count_home_info-S-缺失block', {'home_name': 'OpenAPI', 'city': '北京市', 'zone': '东城区', 'location': '测试'}]
+['count_home_info-S-缺失location', {'home_name': 'OpenAPI', 'city': '北京市', 'zone': '东城区', 'block': '测试'}]
+['count_home_info-S-缺失全部非必须', {}]

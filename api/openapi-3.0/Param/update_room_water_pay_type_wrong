@@ -1,0 +1,5 @@
+['update_room_water_pay_type-F-È±Ê§pay_type', {'room_id': '5b9f8ae2d7cf8916add1b89d', 'uuid': '5a39d93ec0ef01e7a42559475592570a'}]
+['update_room_water_pay_type-F-´íÎóÔªËØroom_id=xxx', {'room_id': 'xxx', 'uuid': '5a39d93ec0ef01e7a42559475592570a', 'pay_type': 2}]
+['update_room_water_pay_type-F-´íÎóÔªËØuuid=xxx', {'room_id': '5b9f8ae2d7cf8916add1b89d', 'uuid': 'xxx', 'pay_type': 2}]
+['update_room_water_pay_type-F-´íÎóÔªËØpay_type=0', {'room_id': '5b9f8ae2d7cf8916add1b89d', 'uuid': '5a39d93ec0ef01e7a42559475592570a', 'pay_type': 0}]
+['update_room_water_pay_type-F-´íÎóÔªËØpay_type=xxx', {'room_id': '5b9f8ae2d7cf8916add1b89d', 'uuid': '5a39d93ec0ef01e7a42559475592570a', 'pay_type': 'xxx'}]

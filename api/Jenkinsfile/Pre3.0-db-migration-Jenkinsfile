@@ -1,0 +1,72 @@
+pipeline
+{
+    agent { label 'pre_saas' }
+    
+    options
+    {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '100', artifactNumToKeepStr: '10', daysToKeepStr: '100', numToKeepStr: '10'))
+        disableConcurrentBuilds()     
+    }
+    triggers 
+    {
+        upstream (threshold: hudson.model.Result.FAILURE, upstreamProjects: 'pre-saas-api-pipeline,pre-saas-manage-pipeline')
+    }
+
+    stages
+    {
+        stage('DownloadCode')
+        {
+            steps
+            {
+                script
+                {                                        
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'                   
+                    testCodeUrl = "git@code.dding.net:yaosheng/api.git"
+                    testBranch = "master"
+                    testDir = "test"
+                    codeUrl = "git@code.dding.net:server/gongyu/saas-db-schema-migration.git"
+                    branch = "master"
+                    codeDir = "code"
+                    
+                    deleteDir()
+                    scripts.downloadCode(testCodeUrl, testBranch, testDir)
+                    scripts.downloadCode(codeUrl, branch, codeDir)                   
+                }
+            }
+        }
+        
+        stage('Deploy')
+        {
+            steps
+            {
+                script
+                {
+                    scripts.printColorLog("blue", "start deploy")
+                    gitChanges = scripts.getChanges()
+                    if (gitChanges != " No changes ")
+                    {
+                        sh "cd $env.WORKSPACE/code && . /etc/profile.d/nodejs.sh && npm install && EGG_SERVER_ENV=preprod npm run migrate:up"
+                    }
+                    scripts.printColorLog("blue", "end deploy")
+                }
+            }
+        }
+    }
+    
+    post
+    {            
+        always 
+        {
+            script
+            {
+                gitChanges = scripts.getChanges()
+                if (gitChanges != " No changes ")
+                {
+                    robotPath = "$env.WORKSPACE/test/Test/DdRobot.py"
+                    scripts.notifyRobot(robotPath)
+                }
+            }
+        }
+    }
+}
+

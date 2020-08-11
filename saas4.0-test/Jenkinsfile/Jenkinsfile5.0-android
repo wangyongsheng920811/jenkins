@@ -1,0 +1,52 @@
+pipeline
+{
+    agent { label 'saas4.0-qa' } 
+    
+    options
+    {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '100', artifactNumToKeepStr: '10', daysToKeepStr: '100', numToKeepStr: '10'))
+        disableConcurrentBuilds()
+    }
+    
+    parameters {
+        gitParameter name: 'branch', type: 'PT_BRANCH', defaultValue: 'develop', useRepository: '(?!.*saas4.0-test).*.git'
+    }
+    
+    environment {
+        ANDROID_HOME = '/home/sdk-tools/android-sdk-linux'
+    }
+
+    stages
+    {
+        stage('DownLoad&&Build')
+        {           
+            steps
+            {
+                script
+                {
+                    branch = (params.branch == "!No Git repository configured in SCM configuration") ? "develop" : params.branch 
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'
+                    scripts.initParam()
+                    scripts.downloadCode(url, branch, "code")                    
+                    sh "cd $env.WORKSPACE/code && $compileCommand"
+                    apkUrl = sh(returnStdout: true, script: "cd $env.WORKSPACE/code/android/app/build/outputs/apk/release && curl -F 'file=@app-release.apk' -F '_api_key=b53b340ffe748e276d309eec2d9ef962' https://www.pgyer.com/apiv2/app/upload | grep -o 'http.*[^}]'")
+                    apkUrl=apkUrl.replaceAll("\\\\","").replaceAll('"', '')
+                    buildDescription "<img src='$apkUrl' height='200' width='200'/>"
+                } 
+            }
+        }
+    }
+    
+    post
+    {      
+        always
+        {                            
+            script
+            {
+                robotPath = "/root/jenkins/workspace/update-ddrobot-pipeline/DdRobot/Script/DdRobot.py"
+                scripts.notifyRobot(robotPath)
+                //archiveArtifacts "code/android/app/build/outputs/apk/release/*.apk"
+            } 
+        }
+    }
+}

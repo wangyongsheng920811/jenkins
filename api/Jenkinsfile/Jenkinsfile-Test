@@ -1,0 +1,92 @@
+pipeline
+{
+    agent { label 'saas_api' }
+    
+    options
+    {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '100', artifactNumToKeepStr: '10', daysToKeepStr: '100', numToKeepStr: '10'))
+        disableConcurrentBuilds()     
+    }
+    triggers 
+    {
+       upstream (threshold: hudson.model.Result.SUCCESS, upstreamProjects: 'saas-api-pipeline,openapi-pipeline')
+    }
+
+    stages
+    {             
+        stage('DownloadTestCode')
+        {
+            steps
+            {
+                script
+                {                    
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'                   
+                    gitUrl = "git@code.dding.net:yaosheng/api.git"
+                    branch = "master"
+                    dir = "test"
+                    deleteDir()
+                    scripts.downloadCode(gitUrl, branch, dir)
+                }
+            }
+        }
+                          
+        stage('RunTestCase')
+        {
+            steps
+            {
+                script
+                {
+                    server = params.Online_Server ? 'onoffline=on' : 'onoffline=off'
+                    echo "$params.Online_Server"
+                    saasapi = params.saasapi.replaceAll(",", " ")
+                    openapi = params.openapi.replaceAll(",", " ")
+
+                    if(saasapi == 'false')
+                    {
+                        scripts.printColorLog("blue", "started by other project, run all cases")
+                        saasapi = "'saas_*.py'"
+                        openapi = "'*api*'"
+                    }
+                    
+                    if(saasapi == '')
+                    {
+                        scripts.printColorLog("yellow", "no test case is selected, do not run saas api")
+                    }
+                    else
+                    {
+                        scripts.printColorLog("blue", "run saasapi, case=$saasapi, server=$server")
+                        sh "cd $env.WORKSPACE/test/CgAPI/API_CG/Run_case && python3 -u run_api.py $saasapi $server"
+                        reportDir = "$env.WORKSPACE/test/CgAPI/API_CG/Run_case"
+                        reportName = "SaaSAPI Test Report"
+                        scripts.reportHtml(reportDir, reportName)
+                    }
+                    
+                    if(openapi == '')
+                    {
+                        scripts.printColorLog("yellow", "rno test case is selected, do not run open api")
+                    }
+                    else
+                    {
+                        scripts.printColorLog("blue", "run openapi, case=$openapi, server=$server")
+                        sh "cd $env.WORKSPACE/test/openapi-3.0/OpenAPI/RunCase && python3 -u run_api.py $openapi $server"
+                        reportDir = "$env.WORKSPACE/test/openapi-3.0/OpenAPI/RunCase"
+                        reportName = "OpenAPI Test Report"
+                        scripts.reportHtml(reportDir, reportName)
+                    }
+                }
+            }
+        }
+    }
+    
+    post
+    {            
+        always 
+        {
+            script
+            {
+                robotPath = "/home/Jenkins/workspace/update_ddrobot/DdRobot/Test/DdRobot.py"
+                scripts.notifyRobot(robotPath)
+            }
+        }
+    }
+}

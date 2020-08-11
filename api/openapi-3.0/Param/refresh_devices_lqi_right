@@ -1,0 +1,4 @@
+['refresh_devices_lqi-S-全部参数', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'type': '-1', 'uuids': ['43edb9bf9277c474eb670829105a017e', '3320e79de87067ce88e40724e5728ead']}]
+['refresh_devices_lqi-S-缺失type', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'uuids': ['43edb9bf9277c474eb670829105a017e', '3320e79de87067ce88e40724e5728ead']}]
+['refresh_devices_lqi-S-缺失uuids', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'type': '-1'}]
+['refresh_devices_lqi-S-缺失全部非必须', {'home_id': '5b9f8ae2d7cf8916add1b89c'}]

@@ -1,0 +1,334 @@
+def initParam()
+{
+    switch(env.JOB_NAME)
+    {
+        case "saas-api-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-api.git'
+            startCommand = 'EGG_SERVER_ENV=dev npm run start'
+            stopCommand = 'sudo npm stop'
+            break
+        case "saas-file-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-file.git'
+            startCommand = 'EGG_SERVER_ENV=dev npm run start'
+            stopCommand = 'sudo npm stop'
+            break
+        case "saas-fe-3.0-pipeline":
+            url = 'git@code.dding.net:server-fe/gongyu/saas-fe-3.0.git'
+            startCommand = 'npm run release && sudo nginx -s reload'
+            stopCommand = 'echo no need to stop'
+            break
+        case "saas-manage-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-manage.git'
+            startCommand = 'EGG_SERVER_ENV=dev runTask=true npm run start'
+            stopCommand = 'sudo npm stop'
+            break
+        case "saas-manager-fe-pipeline":
+            url = 'git@code.dding.net:server-fe/gongyu/saas-manager-fe.git'
+            startCommand = 'npm run release && sudo nginx -s reload'
+            stopCommand = 'echo no need to stop'
+            break
+        case "saas-sdk-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-sdk.git'
+            startCommand = 'EGG_SERVER_ENV=dev npm run start'
+            stopCommand = 'sudo npm stop'
+            break
+        case "saas-tenant-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-tenant.git'
+            startCommand = 'EGG_SERVER_ENV=dev npm run start'
+            stopCommand = 'sudo npm stop'
+            break
+        case "openapi-pipeline":
+            url = 'git@code.dding.net:server/gongyu/openapi.git'
+            startCommand = 'EGG_SERVER_ENV=dev npm run start'
+            stopCommand = 'sudo npm stop'
+            break
+        case "queue-service-pipeline":
+            url = 'git@code.dding.net:server/gongyu/queue-service.git'
+            startCommand = "sed 's/cluster/fork/' pm2.event.battery_local.json  -i && sed 's/cluster/fork/' pm2.event.local.json  -i && sed 's/cluster/fork/' pm2.service.local.json  -i && pm2 start pm2.event.battery_local.json && pm2 start pm2.event.local.json && pm2 start pm2.service.local.json"
+            stopCommand = 'pm2 del queue_service_battery_local && pm2 del queue_event_local && pm2 del queue_service_local'
+            break
+        case "saas-event-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-event.git'
+            startCommand = "sed 's/cluster/fork/' pm2.battery_local.json  -i && sed 's/cluster/fork/' pm2.local.json  -i && pm2 start pm2.battery_local.json && pm2 start pm2.local.json"
+            stopCommand = 'pm2 stop all'
+            break
+        case "wm-paas-pipeline":
+            url = 'git@code.dding.net:server/gongyu/wm-paas.git'
+            startCommand = 'pm2 start pm2.json'
+            stopCommand = 'sudo pm2 stop pm2.json'
+            break
+        case "saas-schedule-consumer-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-schedule-consumer.git'
+            startCommand = "sed 's/cluster/fork/' pm2.config.js  -i && pm2 startOrGracefulReload pm2.config.js --env dev"
+            stopCommand = 'sudo pm2 stop pm2.config.js --env dev && pm2 del saas-schedule-consumer'
+            break
+        case "saas-inner-exception-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-inner-exception.git'
+            startCommand = "EGG_SERVER_ENV=dev npm start"
+            stopCommand = 'sudo npm stop'
+            break
+        case "saas-access-biz-api-pipeline":
+            url = 'git@code.dding.net:server/gongyu/access-biz-api.git'
+            startCommand = "EGG_SERVER_ENV=dev npm start"
+            stopCommand = 'sudo npm stop'
+            break
+        case "pre-saas-api-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-api.git'
+            //branch = "master"
+            startCommand = 'EGG_SERVER_ENV=preprod npm run start'
+            stopCommand = 'npm stop || echo npm stop failed'
+            ip = '192.168.1.211'
+            break
+        case "pre-saas-file-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-file.git'
+            //branch = "master"
+            startCommand = 'EGG_SERVER_ENV=preprod npm run start'
+            stopCommand = 'npm stop || echo npm stop failed'
+            ip = '192.168.1.211'
+            break
+        case "pre-saas-fe-3.0-pipeline":
+            url = 'git@code.dding.net:server-fe/gongyu/saas-fe-3.0.git'
+            //branch = "master"
+            startCommand = 'npm run build-pre'
+            ip = '192.168.1.210'
+            deployDir = 'pre-saas.dding.net'
+            break
+        case "pre-saas-manage-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-manage.git'
+            //branch = "master"
+            startCommand = 'EGG_SERVER_ENV=preprod runTask=true npm run start'
+            stopCommand = 'npm stop || echo npm stop failed'
+            ip = '192.168.1.214'
+            break
+        case "pre-saas-manager-fe-pipeline":
+            url = 'git@code.dding.net:server-fe/gongyu/saas-manager-fe.git'
+            //branch = "master"
+            startCommand = 'npm run build-pre'
+            ip = '192.168.1.210'
+            deployDir = 'pre-manage.dding.net'
+            break
+        case "pre-queue-service-pipeline":
+            url = 'git@code.dding.net:server/gongyu/queue-service.git'
+            //branch = "master"
+            startCommand = 'pm2 start pm2.service.preprod.json && pm2 start pm2.event.preprod.json'
+            stopCommand = 'pm2 stop all && pm2 kill || echo npm stop failed'
+            ip = '192.168.1.212'
+            break
+        case "pre-openapi-pipeline":
+            url = 'git@code.dding.net:server/gongyu/openapi.git'
+            //branch = "develop"
+            startCommand = 'EGG_SERVER_ENV=preprod npm start'
+            stopCommand = 'npm stop || echo npm stop failed'
+            ip = '192.168.1.222'
+            break
+        case "pre-saas-tenant-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-tenant.git'
+            //branch = "master"
+            startCommand = 'EGG_SERVER_ENV=preprod npm run start'
+            stopCommand = 'npm stop || echo npm stop failed'
+            ip = '192.168.1.214'
+            break
+        case "pre-saas-db-schema-migration-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-db-schema-migration.git'
+            //branch = "master"
+            startCommand = 'EGG_SERVER_ENV=prod npm run migrate:up'
+            break
+
+        case "saas-fe-4.0-pms-pipeline":
+            url = 'git@code.dding.net:server-fe/gongyu/saas-fe-4.0.git'
+            break
+        case "saas-fe-4.0-cms-pipeline":
+            url = 'git@code.dding.net:server-fe/gongyu/saas-fe-4.0-cms.git'
+            break
+        case "saas-pms-server-pipeline":
+            url = 'git@code.dding.net:server/gongyu/pms-server.git'
+            deployCommand = 'chmod 777 deploy-pms.sh &&  bash deploy-pms.sh'
+            mvnCommand = " sed 's/application-docker/application-test/' ./src/main/java/com/odfly/config/DBConfig.java  -i && sed -i '0,/\\/Library\\/afiletomaven\\/yunding\\/lib/s/\\/Library\\/afiletomaven\\/yunding\\/lib/.\\//' pom.xml && sed -i '0,/\\/Library\\/afiletomaven\\/yunding/s/\\/Library\\/afiletomaven\\/yunding/.\\/lib/' pom.xml && sed -i 's/config.SpringContextUtil/common.util.SpringContextHolder/' ./src/main/java/com/odfly/module/component/service/SmsApi.java && sed -i 's/SpringContextUtil/SpringContextHolder/' ./src/main/java/com/odfly/module/component/service/SmsApi.java && mvn clean package -Dmaven.test.skip=true -Ptest"
+            break
+        case "saas-cms-server-pipeline":
+            url = 'git@code.dding.net:yutingcong/gongyu-cms-server.git'
+            deployCommand = 'chmod 777 deploy-cms.sh &&  bash deploy-cms.sh'
+            mvnCommand = " sed -i '0,/\\/Users\\/a10.12\\/yunding\\/cms/s/\\/Users\\/a10.12\\/yunding\\/cms/.\\//' pom.xml && sed -i '0,/\\/Users\\/a10.12\\/yunding\\/cms/s/\\/Users\\/a10.12\\/yunding\\/cms/.\\/lib/' pom.xml && sed -i 's/docker/test/'  ./src/main/resources/application.properties && mvn clean package -Dmaven.test.skip=true findbugs:findbugs"
+            break
+        case "qa-saas-api-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-api.git'
+            startCommand = 'EGG_SERVER_ENV=dev npm run start'
+            stopCommand = 'sudo npm stop'
+            break
+        case "qa-saas-fe-3.0-pipeline":
+            url = 'git@code.dding.net:server-fe/gongyu/saas-fe-3.0.git'
+            startCommand = 'npm run release && sudo nginx -s reload'
+            stopCommand = 'echo no need to stop'
+            break
+        case "qa-saas-manage-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-manage.git'
+            startCommand = 'EGG_SERVER_ENV=dev runTask=true npm run start'
+            stopCommand = 'sudo npm stop'
+            break
+        case "qa-saas-manager-fe-pipeline":
+            url = 'git@code.dding.net:server-fe/gongyu/saas-manager-fe.git'
+            startCommand = 'npm run release && sudo nginx -s reload'
+            stopCommand = 'echo no need to stop'
+            break
+        case "qa-saas-sdk-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-sdk.git'
+            startCommand = 'EGG_SERVER_ENV=dev npm run start'
+            stopCommand = 'sudo npm stop'
+            break
+        case "qa-saas-tenant-pipeline":
+            url = 'git@code.dding.net:server/gongyu/saas-tenant.git'
+            startCommand = 'EGG_SERVER_ENV=dev npm run start'
+            stopCommand = 'sudo npm stop'
+            break
+        case "qa-openapi-pipeline":
+            url = 'git@code.dding.net:server/gongyu/openapi.git'
+            startCommand = 'EGG_SERVER_ENV=dev npm run start'
+            stopCommand = 'npm stop'
+            break
+        case "qa-wm-paas-pipeline":
+            url = 'git@code.dding.net:server/gongyu/wm-paas.git'
+            startCommand = 'pm2 start pm2.json'
+            stopCommand = 'sudo pm2 stop pm2.json'
+            break
+        case "qa-saas-access-biz-api-pipeline":
+            url = 'git@code.dding.net:server/gongyu/access-biz-api.git'
+            startCommand = "EGG_SERVER_ENV=dev npm start"
+            stopCommand = 'sudo npm stop'
+            break
+        case "docker-saas-api-pipeline":
+            url = 'git@code.dding.net:gyTech/saas-docker-service.git'
+            startCommand = "cd code/saas-api && docker-compose pull && docker-compose -p saas-api-$imageBranch down && docker-compose -p saas-api-$imageBranch up --build -d"
+            break
+        case "docker-saas-manage-pipeline":
+            url = 'git@code.dding.net:gyTech/saas-docker-service.git'
+            startCommand = "cd code/saas-manage && docker-compose pull && docker-compose -p saas-manage-$imageBranch down && docker-compose -p saas-manage-$imageBranch up --build -d"
+            break
+        case "docker-open-api-pipeline":
+            url = 'git@code.dding.net:gyTech/saas-docker-service.git'
+            startCommand = "cd code/open-api && docker-compose pull && docker-compose -p open-api-$imageBranch down && docker-compose -p open-api-$imageBranch up --build -d"
+            break
+        case "docker-queue-service-pipeline":
+            url = 'git@code.dding.net:gyTech/saas-docker-service.git'
+            startCommand = "cd code/queue-service && docker-compose pull && docker-compose -p queue-service-$imageBranch down && docker-compose -p queue-service-$imageBranch up --build -d"
+            break
+        case "docker-saas-tenant-pipeline":    
+            url = 'git@code.dding.net:gyTech/saas-docker-service.git'
+            startCommand = "cd code/saas-tenant && docker-compose pull && docker-compose -p saas-tenant-$imageBranch down && docker-compose -p saas-tenant-$imageBranch up --build -d"
+            break
+        case "saas-wx-pipeline":    
+            url = 'git@code.dding.net:server-fe/gongyu/ydznkj-wx.git'
+            startCommand = "npm run build-test"
+            stopCommand = 'sudo npm stop'
+            break  
+        default:
+            printColorLog("red", "wrong pipeline name")
+            break
+    }
+}
+
+def downloadCode(url, branch, dir)
+{  
+    printColorLog("blue", "start download code from branch $branch of $url")
+    checkout([
+        $class: 'GitSCM', 
+        branches: [[name: "$branch"]], 
+        doGenerateSubmoduleConfigurations: false, 
+        extensions: [ 
+            [$class: 'RelativeTargetDirectory', relativeTargetDir: "$dir"], 
+            [$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: true, recursiveSubmodules: true, reference: '', timeout: 3, trackingSubmodules: false]], 
+        submoduleCfg: [], 
+        userRemoteConfigs: [[credentialsId: '428716d4-b84d-4ae6-980d-560eb9c8119e', 
+        url: "$url"]]])
+    printColorLog("blue", "end download code from branch $branch of $url")
+}
+
+@NonCPS
+def getChanges()
+{   
+    MAX_MSG_LEN = 100
+    def changeString = ""
+    def changeLogSets = currentBuild.changeSets
+    for (int i = 0; i < changeLogSets.size(); i++) 
+    {
+        def entries = changeLogSets[i].items
+        for (int j = 0; j < entries.length; j++)
+        {
+            def entry = entries[j]
+            change_msg = entry.msg.take(MAX_MSG_LEN)
+            //echo "${entry.commitId} by ${entry.author} on ${new Date(entry.timestamp)}: ${entry.msg}"
+            changeString += "${change_msg} --by ${entry.author} JENKINS    "
+        }
+    }
+    if (!changeString)
+    {
+        changeString = " No changes "
+    }
+               
+    return changeString
+}
+
+def notifyRobot(robotPath, port="")
+{
+    gitChanges = getChanges()
+    jobName = env.JOB_NAME+getUpstreamName()
+    wrap([$class: 'BuildUser']) 
+    {
+        sh "python3 -u $robotPath \"$jobName\" $BUILD_USER $env.BUILD_URL $currentBuild.currentResult $currentBuild.timeInMillis $branch \"$gitChanges\" $port"
+    }
+}
+
+def reportHtml(reportDir, reportName)
+{
+    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, includes: '**/*.html', keepAll: true, reportDir: reportDir, reportFiles: 'Report.html', reportName: reportName, reportTitles: 'Test Report'])
+}
+
+def checkPerformanceTestResult(reportDir)
+{
+    n = sh(script: "tail -1 $reportDir/report_requests.csv |awk -F, '{ print \$4; }'", returnStdout: true)
+    if (n.replaceAll( "\\s", "" ) != "0")
+    {
+        printColorLog("red", "failed requests number is not 0")
+        currentBuild.result = 'UNSTABLE'
+    }
+}
+
+def printColorLog(color, str)
+{
+    switch(color)
+    {
+        case "red":
+            n = 31
+            break
+        case "green":
+            n = 32
+            break
+        case "yellow":
+            n = 33
+            break
+        case "blue":
+            n = 34
+            break
+        default :
+            n = 30
+            break
+    }
+    ansiColor('xterm')
+    {
+        echo  "\033[${n}m############ ${str} ############"
+    }
+}
+
+def getUpstreamName()
+{
+    upstreamName = ''
+    if(currentBuild.upstreamBuilds)
+    {
+        printColorLog("blue", "started by upstream project")
+        currentBuild.upstreamBuilds?.each { b ->
+        upstreamName = ' 由上游项目：' + b.getFullDisplayName() + '触发构建'
+        }  
+    }
+    return upstreamName
+}
+
+return this

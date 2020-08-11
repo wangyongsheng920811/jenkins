@@ -1,0 +1,4 @@
+['add_home-S-全部参数', {'home_type': 2, 'country': '中国', 'city': '深圳', 'zone': '南山区', 'location': '深南大道', 'block': '深南花园', 'home_id': 'home_bb_right_0', 'home_name': 'test01_right_0', 'description': '深南花园描述'}]
+['add_home-S-缺失home_type', {'country': '中国', 'city': '深圳', 'zone': '南山区', 'location': '深南大道', 'block': '深南花园', 'home_id': 'home_bb_right_1', 'home_name': 'test01_right_1', 'description': '深南花园描述'}]
+['add_home-S-缺失description', {'home_type': 2, 'country': '中国', 'city': '深圳', 'zone': '南山区', 'location': '深南大道', 'block': '深南花园', 'home_id': 'home_bb_right_2', 'home_name': 'test01_right_2'}]
+['add_home-S-缺失全部非必须', {'country': '中国', 'city': '深圳', 'zone': '南山区', 'location': '深南大道', 'block': '深南花园', 'home_id': 'home_bb_right_3', 'home_name': 'test01_right_3'}]

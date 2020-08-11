@@ -1,0 +1,189 @@
+def initParam()
+{
+    switch(env.JOB_NAME)
+    {
+        
+        case "saas-pms-web-pipeline":
+        case "dev-saas-pms-web-pipeline":
+            url = 'git@code.dding.net:server/lease-platform/Web/saas4-web-pms.git'
+            deployCommand = 'echo no need to deploy'
+            mvnCommand = 'no need mvn'
+            break
+            
+        case "saas-cms-web-pipeline":
+        case "dev-saas-cms-web-pipeline":
+            url = 'git@code.dding.net:server/lease-platform/Web/saas4-web-cms.git'
+            deployCommand = 'npm config set registry http://registry.npm.taobao.org/ && npm install && npm run build'
+            //deployCommand = 'npm config set registry https://registry.npmjs.org && npm install && npm run build'
+            mvnCommand = 'no need mvn'
+            break
+            
+        case "saas-transfer-web-pipeline":
+            url = 'git@code.dding.net:server/lease-platform/Web/saas4-web-transfer.git'
+            deployCommand = 'npm config set registry http://registry.npm.taobao.org/ && /home/node/node-v10.15.3-linux-x64/bin/cnpm install && npm run build'
+            //deployCommand = 'npm config set registry https://registry.npmjs.org && npm install && npm run build'
+            mvnCommand = 'no need mvn'
+            break 
+            
+        case "saas-pms-api-pipeline":
+            url = 'git@code.dding.net:server/lease-platform/pms-api.git'
+            deployCommand = 'chmod 777 deploy-pms-new.sh &&  bash deploy-pms-new.sh'
+            mvnCommand = 'mvn clean package -Dmaven.test.skip=true -Ptest'
+            break
+            
+        case "saas-cms-api-pipeline":
+            url = 'git@code.dding.net:server/lease-platform/cms-api.git'
+            deployCommand = 'chmod 777 deploy-cms-new.sh &&  bash deploy-cms-new.sh'
+            mvnCommand = 'mvn clean package -Dmaven.test.skip=true'
+            break
+            
+        case "saas-pms-migrate-pipeline":
+            //url = 'git@code.dding.net:server/gongyu/pms-migrate.git'
+            url = 'git@code.dding.net:liuyihang/pms-migrate-api.git'
+            deployCommand = 'chmod 777 deploy-pms-migrate.sh &&  bash deploy-pms-migrate.sh'
+            mvnCommand = 'mvn clean package -Dmaven.test.skip=true -Ptest'
+            break
+            
+        case "hyperloop-web-partner-pipeline":
+            url = 'git@code.dding.net:server/lease-platform/Web/hyperloop-web-partner.git'
+            deployCommand = 'npm install && npm run build && pm2 restart serve'
+            mvnCommand = 'no need mvn'
+            break
+            
+        case "develop-hyperloop-web-pipeline":
+        case "develop-hyperloop-web-pipeline1":
+            branch = 'develop'
+            url = 'git@code.dding.net:server/lease-platform/Web/hyperloop-web-partner.git'
+            break
+            
+        case "hyperloop-app-partner-pipeline":
+            url = 'git@code.dding.net:server/lease-platform/App/hyperloop-app-partner.git'
+            compileCommand = 'yarn && cd android && ./gradlew assembleRelease'
+            break
+            
+        case "develop-hyperloop-api-pipeline":
+        case "hyperloop-api-pipeline":
+            branch = 'develop'
+            url = 'git@code.dding.net:server/lease-platform/hyperloop-api.git'
+            break
+            
+        case "hyperloop-web-tenant-pipeline":
+            branch = 'develop'
+            url = 'git@code.dding.net:server/lease-platform/Web/hyperloop-web-tenant.git'
+            deployCommand = 'yarn && npm run build:h5'
+            break
+    
+        default:
+            printColorLog("red", "wrong pipeline name")
+            break
+    }
+}
+
+def downloadCode(url, branch, dir)
+{  
+    printColorLog("blue", "start download code from branch $branch of $url")
+    checkout([
+        $class: 'GitSCM', 
+        branches: [[name: "$branch"]], 
+        doGenerateSubmoduleConfigurations: false, 
+        extensions: [ 
+            [$class: 'RelativeTargetDirectory', relativeTargetDir: "$dir"], 
+            [$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: true, recursiveSubmodules: true, reference: '', timeout: 3, trackingSubmodules: false]], 
+        submoduleCfg: [], 
+        userRemoteConfigs: [[credentialsId: 'wys', 
+        url: "$url"]]])
+    printColorLog("blue", "end download code from branch $branch of $url")
+}
+
+@NonCPS
+def getChanges()
+{   
+    MAX_MSG_LEN = 100
+    def changeString = ""
+    def changeLogSets = currentBuild.changeSets
+    for (int i = 0; i < changeLogSets.size(); i++) 
+    {
+        def entries = changeLogSets[i].items
+        for (int j = 0; j < entries.length; j++)
+        {
+            def entry = entries[j]
+            change_msg = entry.msg.take(MAX_MSG_LEN)
+            //echo "${entry.commitId} by ${entry.author} on ${new Date(entry.timestamp)}: ${entry.msg}"
+            if ("${entry.author}" != "wangyongsheng")
+            {
+                changeString += "${change_msg} --by ${entry.author} JENKINS    "
+            }
+        }
+    }
+    if (!changeString)
+    {
+        changeString = " No changes "
+    }
+               
+    return changeString
+}
+
+def notifyRobot(robotPath)
+{
+    gitChanges = getChanges()
+    jobName = env.JOB_NAME+getUpstreamName()
+    wrap([$class: 'BuildUser']) 
+    {
+        sh "python3 -u $robotPath \"$jobName\" $BUILD_USER $env.BUILD_URL $currentBuild.currentResult $currentBuild.timeInMillis $branch \"$gitChanges\""
+    }
+}
+
+def notifyRobot1(robotPath1)
+{
+    jobName = env.JOB_NAME+getUpstreamName()
+    wrap([$class: 'BuildUser']) 
+    {
+        sh "python3 -u $robotPath1 \"$jobName\" $BUILD_USER $env.BUILD_URL pre_build $currentBuild.timeInMillis $branch none"
+    }
+}
+
+def reportHtml(reportDir, reportName)
+{
+    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, includes: '**/*.html', keepAll: true, reportDir: reportDir, reportFiles: 'test_report.html', reportName: reportName, reportTitles: 'Test Report'])
+}
+
+def printColorLog(color, str)
+{
+    switch(color)
+    {
+        case "red":
+            n = 31
+            break
+        case "green":
+            n = 32
+            break
+        case "yellow":
+            n = 33
+            break
+        case "blue":
+            n = 34
+            break
+        default :
+            n = 30
+            break
+    }
+    ansiColor('xterm')
+    {
+        echo  "\033[${n}m############ ${str} ############"
+    }
+}
+
+def getUpstreamName()
+{
+    upstreamName = ''
+    if(currentBuild.upstreamBuilds)
+    {
+        printColorLog("blue", "started by upstream project")
+        currentBuild.upstreamBuilds?.each { b ->
+        upstreamName = ' 由上游项目：' + b.getFullDisplayName() + '触发构建'
+        }  
+    }
+    return upstreamName
+}
+
+return this

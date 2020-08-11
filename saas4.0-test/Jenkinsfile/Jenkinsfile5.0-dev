@@ -1,0 +1,150 @@
+pipeline
+{
+    agent { label 'saas4.0-qa' }  
+
+    options
+    {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '100', artifactNumToKeepStr: '10', daysToKeepStr: '100', numToKeepStr: '10'))
+        disableConcurrentBuilds()
+    }
+    
+    parameters 
+    { 
+        booleanParam(name: 'springcloud_discovery', defaultValue: false, description: '') 
+        booleanParam(name: 'springcloud_gateway', defaultValue: false, description: '')
+        booleanParam(name: 'api_auth', defaultValue: false, description: '')
+        booleanParam(name: 'api_merchant', defaultValue: false, description: '')
+        booleanParam(name: 'api_tenant', defaultValue: false, description: '')
+        booleanParam(name: 'api_task', defaultValue: false, description: '')
+        booleanParam(name: 'api_dts', defaultValue: false, description: '')
+        booleanParam(name: 'api_notify', defaultValue: false, description: '')
+        booleanParam(name: 'api_consumer', defaultValue: false, description: '')
+    }
+
+    stages
+    {
+        stage('Deploy')
+        {
+            steps
+            {
+                script
+                {
+                    testUrl = "git@code.dding.net:server/lease-platform/saas4.0-test.git"
+                    testBranch = "master"
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'
+                    scripts.initParam()
+                    scripts.downloadCode(testUrl, testBranch, "code")
+                    scripts.downloadCode(url, branch, "api-code")
+                    
+                    packageCommand = ''
+                    packageCommand += params.springcloud_discovery ? 'hyperloop-springcloud/hyperloop-springcloud-discovery, ' : ''
+                    packageCommand += params.springcloud_gateway ? 'hyperloop-springcloud/hyperloop-springcloud-gateway, ' : ''
+                    packageCommand += params.api_auth ? 'hyperloop-api/hyperloop-api-auth, ' : ''
+                    packageCommand += params.api_merchant ? 'hyperloop-api/hyperloop-api-merchant, ' : ''
+                    packageCommand += params.api_tenant ? 'hyperloop-api/hyperloop-api-tenant, ' : ''
+                    packageCommand += params.api_task ? 'hyperloop-api/hyperloop-api-task, ' : ''
+                    packageCommand += params.api_dts ? 'hyperloop-api/hyperloop-api-dts, ' : ''
+                    packageCommand += params.api_notify ? 'hyperloop-api/hyperloop-api-notify, ' : ''
+                    packageCommand += params.api_consumer ? 'hyperloop-api/hyperloop-api-consumer, ' : ''
+                    packageCommand = "mvn clean package -pl '$packageCommand' -am --also-make -Dmaven.test.skip=true"
+                    sh "ssh -tt root@192.168.2.85 \"cd /root/jenkins/hyperloop-api && source /etc/profile && git pull && $packageCommand\""
+
+                    robotPath1 = "$env.WORKSPACE/code/Script/DdRobot.py"
+                    scripts.notifyRobot1(robotPath1)
+
+                    if(params.springcloud_discovery)
+                    {
+                        api_port = '18000'
+                        api_name = 'hyperloop-springcloud-discovery'
+                        api_path = '/root/jenkins/hyperloop-api/hyperloop-springcloud/hyperloop-springcloud-discovery/target'
+                        sh "cd $env.WORKSPACE/code/Script && JENKINS_NODE_COOKIE=dontKillMe && chmod 777 deploy-hyperloop-api.sh && bash deploy-hyperloop-api.sh $api_port $api_name $api_path"
+                    }
+                    
+                    if(params.springcloud_gateway)
+                    {
+                        api_port = '18001'
+                        api_name = 'hyperloop-springcloud-gateway'
+                        api_path = '/root/jenkins/hyperloop-api/hyperloop-springcloud/hyperloop-springcloud-gateway/target'
+                        sh "cd $env.WORKSPACE/code/Script && JENKINS_NODE_COOKIE=dontKillMe && chmod 777 deploy-hyperloop-api.sh && bash deploy-hyperloop-api.sh $api_port $api_name $api_path"
+                    }
+                    
+                    if(params.api_auth)
+                    {
+                        api_port = '18011'
+                        api_name = 'hyperloop-api-auth'
+                        api_path = '/root/jenkins/hyperloop-api/hyperloop-api/hyperloop-api-auth/target'
+                        sh "cd $env.WORKSPACE/code/Script && JENKINS_NODE_COOKIE=dontKillMe && chmod 777 deploy-hyperloop-api.sh && bash deploy-hyperloop-api.sh $api_port $api_name $api_path"
+                    }
+                    
+                    //if(params.openapi_boss)
+                    //{
+                     //   api_port = ''
+                     //   api_name = 'hyperloop-openapi-boss'
+                     //   api_path = '/root/jenkins/hyperloop-api/hyperloop-openapi/hyperloop-openapi-boss/target'
+                      //  sh "cd $env.WORKSPACE/code/Script && JENKINS_NODE_COOKIE=dontKillMe && chmod 777 deploy-hyperloop-api.sh && bash deploy-hyperloop-api.sh $api_port $api_name $api_path"
+                    //}
+                    
+                    if(params.api_merchant)
+                    {
+                        api_port = '18010'
+                        api_name = 'hyperloop-api-merchant'
+                        api_path = '/root/jenkins/hyperloop-api/hyperloop-api/hyperloop-api-merchant/target'
+                        sh "cd $env.WORKSPACE/code/Script && JENKINS_NODE_COOKIE=dontKillMe && chmod 777 deploy-hyperloop-api.sh && bash deploy-hyperloop-api.sh $api_port $api_name $api_path"
+                    }
+                    
+                    if(params.api_tenant)
+                    {
+                        api_port = '18012'
+                        api_name = 'hyperloop-api-tenant'
+                        api_path = '/root/jenkins/hyperloop-api/hyperloop-api/hyperloop-api-tenant/target'
+                        sh "cd $env.WORKSPACE/code/Script && JENKINS_NODE_COOKIE=dontKillMe && chmod 777 deploy-hyperloop-api.sh && bash deploy-hyperloop-api.sh $api_port $api_name $api_path"
+                    }
+                    
+                    if(params.api_task)
+                    {
+                        api_port = '18014'
+                        api_name = 'hyperloop-api-task'
+                        api_path = '/root/jenkins/hyperloop-api/hyperloop-api/hyperloop-api-task/target'
+                        sh "cd $env.WORKSPACE/code/Script && JENKINS_NODE_COOKIE=dontKillMe && chmod 777 deploy-hyperloop-api.sh && bash deploy-hyperloop-api.sh $api_port $api_name $api_path"
+                    }
+                    
+                    if(params.api_dts)
+                    {
+                        api_port = 'api-dts'
+                        api_name = 'hyperloop-api-dts'
+                        api_path = '/root/jenkins/hyperloop-api/hyperloop-api/hyperloop-api-dts/target'
+                        sh "cd $env.WORKSPACE/code/Script && JENKINS_NODE_COOKIE=dontKillMe && chmod 777 deploy-hyperloop-api.sh && bash deploy-hyperloop-api.sh $api_port $api_name $api_path"
+                    }
+                    
+                    if(params.api_notify)
+                    {
+                        api_port = '18020'
+                        api_name = 'hyperloop-api-notify'
+                        api_path = '/root/jenkins/hyperloop-api/hyperloop-api/hyperloop-api-notify/target'
+                        sh "cd $env.WORKSPACE/code/Script && JENKINS_NODE_COOKIE=dontKillMe && chmod 777 deploy-hyperloop-api.sh && bash deploy-hyperloop-api.sh $api_port $api_name $api_path"
+                    }
+                    
+                    if(params.api_consumer)
+                    {
+                        api_port = 'api_consumer'
+                        api_name = 'hyperloop-api-consumer'
+                        api_path = '/root/jenkins/hyperloop-api/hyperloop-api/hyperloop-api-consumer/target'
+                        sh "cd $env.WORKSPACE/code/Script && JENKINS_NODE_COOKIE=dontKillMe && chmod 777 deploy-hyperloop-api.sh && bash deploy-hyperloop-api.sh $api_port $api_name $api_path"
+                    }
+                }
+            }
+        }
+    }
+    
+    post
+    {
+        always 
+        {
+            script
+            {
+                robotPath = "/root/jenkins/workspace/update-ddrobot-pipeline/DdRobot/Script/DdRobot.py"
+                scripts.notifyRobot(robotPath)
+            }
+        }
+    }
+}

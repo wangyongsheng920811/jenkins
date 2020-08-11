@@ -1,0 +1,55 @@
+pipeline
+{
+    agent { label '2.0-saas' }
+    
+    options
+    {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '100', artifactNumToKeepStr: '10', daysToKeepStr: '100', numToKeepStr: '10'))
+        disableConcurrentBuilds()
+    }
+    parameters {
+        gitParameter name: 'branch', type: 'PT_BRANCH', defaultValue: 'master', useRepository: '(?!.*yaosheng).*.git'
+    }
+
+    stages
+    {
+        stage('DownloadCode')
+        {
+            steps
+            {
+                script
+                {
+                    branch = (params.branch == "!No Git repository configured in SCM configuration") ? "master" : params.branch 
+                    
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'
+                    scripts.initParam()
+
+                    sh " cd $env.WORKSPACE/code && $stopCommand || echo '############ stopCommand failed ############' "
+                    
+                    testUrl = "git@code.dding.net:yaosheng/api.git"
+                    testBranch = "master"
+                    testDir = "test"
+                    deleteDir()
+                    scripts.downloadCode(testUrl, testBranch, testDir)
+                    scripts.downloadCode(url, branch, "code")
+                                            
+                    scripts.printColorLog("blue", "start server with command $startCommand")
+                    sh " cd $env.WORKSPACE/code && npm config set registry http://registry.npm.taobao.org/ && JENKINS_NODE_COOKIE=dontKillMe && npm install && $startCommand "
+                }
+            }
+        }
+    }
+    
+    post
+    {
+        always 
+        {
+            script
+            {
+                robotPath = "$env.WORKSPACE/test/Test/DdRobot.py"
+                scripts.notifyRobot(robotPath)
+            }
+        }
+    }
+}
+

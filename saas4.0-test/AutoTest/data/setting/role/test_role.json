@@ -1,0 +1,140 @@
+{
+    "test_001_get_all_roles": {
+        "path": "/v1/auth/merchant/roles/all",
+        
+        "test_001_get_all_roles": {
+            "desc": "获取商户所有角色",
+            "method": "get",
+            "check_res_code": "00",
+            "check_res_data": "res.json().get('data') != None"
+        }
+    },
+    
+    "test_002_permissions_by_id": {
+        "path": "/v1/auth/merchant/roles/{}/permissions",
+        
+        "test_001_permissions_by_id": {
+            "desc": "根据id查询角色对应权限",
+            "method": "get",
+            "check_res_code": "00",
+            "check_res_data": null
+        }
+    },
+    
+    "test_003_add_role": {
+        "path": "/v1/auth/merchant/roles",
+        
+        "test_001_add_role": {
+            "desc": "新增未有角色",
+            "method": "post",
+            "params": {
+                "name": "{}",
+                "roleIds": "{}",
+                "permissionIds": "{}"
+            },
+            "check_res_code": "00",
+            "check_res_data": "res.json().get('data').get('id') != None"
+        },
+        
+        "test_common": {
+            "desc": "新增已有角色",
+            "method": "post",
+            "params": {
+                "name": "超管",
+                "roleIds": [],
+                "permissionIds": []
+            },
+            "check_res_code": "51404",
+            "check_res_data": "res.json().get('message') == '角色名重复'"
+        }
+    },
+
+    "test_004_roles_contain": {
+        "path": "/v1/auth/merchant/roles/{}/contain",
+        
+        "test_001_roles_contain": {
+            "desc": "查询角色从属",
+            "method": "get",
+            "check_res_code": "00",
+            "check_res_data": "res.json().get('data') != None"
+        }
+    },
+    
+    "test_005_get_role_info": {
+        "path": "/v1/auth/merchant/roles/{}",
+        
+        "test_001_get_role_info": {
+            "desc": "根据id获取角色信息",
+            "method": "get",
+            "check_res_code": "00",
+            "check_res_data": null
+        }
+    },
+    
+    "test_006_update_role": {
+        "path": "/v1/auth/merchant/roles/{}",
+        
+        "test_001_update_role": {
+            "desc": "更新角色",
+            "method": "put",
+            "params": {
+                "roleId": "{}",
+                "name": "{}",
+                "roleIds": "{}",
+                "permissionIds": "{}"
+            },
+            "check_res_code": "00",
+            "check_res_data": null
+        }
+    },
+       
+    "test_007_delete_role": {
+        "path": "/v1/auth/merchant/roles/{}",
+        
+        "test_001_delete_role": {
+            "desc": "删除角色",
+            "method": "delete",
+            "check_res_code": "00",
+            "check_res_data": null
+        }
+    },
+    
+    "test_008_permissions_list": {
+        "path": "/v1/auth/merchant/permissions",
+        
+        "test_common": {
+            "desc": "显示权限列表",
+            "method": "get",
+            "check_res_code": "00",
+            "check_res_data": null
+        }
+    },
+    
+    "test_009_roles_list": {
+        "path": "/v1/auth/merchant/roles",
+        
+        "test_common_1": {
+            "desc": "查询未存在角色",
+            "method": "get",
+            "params": {
+                "name": "{}",
+                "pageNo": 1,
+                "size": 10
+            },
+            "check_res_code": "00",
+            "check_res_data": "res.json().get('data').get('totalPage') == 0"
+        },
+        
+        "test_common_2": {
+            "desc": "查询已存在角色",
+            "method": "get",
+            "params": {
+                "name": "总经理",
+                "pageNo": 1,
+                "size": 10
+            },
+            "check_res_code": "00",
+            "check_res_data": "res.json().get('data').get('totalPage') != 0"
+        }
+    }
+}

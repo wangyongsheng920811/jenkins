@@ -1,0 +1,4 @@
+['update_room_water_pay_type-S-全部参数', {'room_id': '5b9f8ae2d7cf8916add1b89d', 'uuid': '5a39d93ec0ef01e7a42559475592570a', 'pay_type': 2}]
+['update_room_water_pay_type-S-缺失room_id', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'pay_type': 2}]
+['update_room_water_pay_type-S-缺失uuid', {'room_id': '5b9f8ae2d7cf8916add1b89d', 'pay_type': 2}]
+['update_room_water_pay_type-S-缺失全部非必须', {'pay_type': 2}]

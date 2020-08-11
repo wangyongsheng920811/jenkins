@@ -1,0 +1,2 @@
+['get_elecollector_info_arr-S-全部参数', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'uuid': '2ded63bfad9b0472d2dcf2e209cbb74a'}]
+['get_elecollector_info_arr-S-缺失全部非必须', {'home_id': '5b9f8ae2d7cf8916add1b89c'}]

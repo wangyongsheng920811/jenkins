@@ -1,0 +1,7 @@
+['watermeter_charge-F-È±Ê§amount', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'meter_type': 1, 'room_id': '5b9f8ae2d7cf8916add1b89d'}]
+['watermeter_charge-F-´íÎóÔªËØuuid=xxx', {'uuid': 'xxx', 'meter_type': 1, 'room_id': '5b9f8ae2d7cf8916add1b89d', 'amount': 100}]
+['watermeter_charge-F-´íÎóÔªËØmeter_type=0', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'meter_type': 0, 'room_id': '5b9f8ae2d7cf8916add1b89d', 'amount': 100}]
+['watermeter_charge-F-´íÎóÔªËØmeter_type=xxx', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'meter_type': 'xxx', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'amount': 100}]
+['watermeter_charge-F-´íÎóÔªËØroom_id=xxx', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'meter_type': 1, 'room_id': 'xxx', 'amount': 100}]
+['watermeter_charge-F-´íÎóÔªËØamount=-1', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'meter_type': 1, 'room_id': '5b9f8ae2d7cf8916add1b89d', 'amount': -1}]
+['watermeter_charge-F-´íÎóÔªËØamount=xxx', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'meter_type': 1, 'room_id': '5b9f8ae2d7cf8916add1b89d', 'amount': 'xxx'}]

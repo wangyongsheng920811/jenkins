@@ -1,0 +1,177 @@
+{
+    "test_001_add_store": {
+        "path": "/v1/merchant/stores",
+        
+        "test_common_1": {
+            "desc": "新增已有门店",
+            "method": "post",
+            "params": {
+                "storeName": "分店名重复",
+                "cityCode": "440300",
+                "townCode": "440305",
+                "lat": 22.593232,
+                "lng": 114.004521,
+                "phone": "0755-123456",
+                "address": "南山智园"
+            },
+            "check_res_code": "51102",
+            "check_res_data": "res.json().get('message') == '分店名重复'"
+        },
+        
+        "test_common_2": {
+            "desc": "新增门店不填店名",
+            "method": "post",
+            "params": {
+                "cityCode": "440300",
+                "townCode": "440305",
+                "lat": 22.593232,
+                "lng": 114.004521,
+                "phone": "0755-123456",
+                "address": "南山智园"
+            },
+            "check_res_code": "12",
+            "check_res_data": "res.json().get('message') == '门店名不能为空'"
+        },
+        
+        "test_common_3": {
+            "desc": "新增门店不选城市",
+            "method": "post",
+            "params": {
+                "storeName": "test",
+                "townCode": "440305",
+                "lat": 22.593232,
+                "lng": 114.004521,
+                "phone": "0755-123456",
+                "address": "南山智园"
+            },
+            "check_res_code": "12",
+            "check_res_data": "res.json().get('message') == 'cityCode不能为空'"
+        },
+        
+        "test_common_4": {
+            "desc": "新增门店不选行政区",
+            "method": "post",
+            "params": {
+                "storeName": "test",
+                "cityCode": "440300",
+                "lat": 22.593232,
+                "lng": 114.004521,
+                "phone": "0755-123456",
+                "address": "南山智园"
+            },
+            "check_res_code": "12",
+            "check_res_data": "res.json().get('message') == 'townCode不能为空'"
+        },
+        
+        "test_common_5": {
+            "desc": "新增门店不填详细地址",
+            "method": "post",
+            "params": {
+                "storeName": "test",
+                "cityCode": "440300",
+                "townCode": "440305",
+                "lat": 22.593232,
+                "lng": 114.004521,
+                "phone": "0755-123456"
+            },
+            "check_res_code": "12",
+            "check_res_data": "res.json().get('message') == '详细地址不能为空'"
+        },
+        
+        "test_001_add_store": {
+            "desc": "新增门店",
+            "method": "post",
+            "params": {
+                "storeName": "{}",
+                "cityCode": "440300",
+                "townCode": "440305",
+                "lat": 22.593232,
+                "lng": 114.004521,
+                "phone": "0755-123456",
+                "address": "南山智园"
+            },
+            "check_res_code": "00",
+            "check_res_data": null
+        }
+    },
+    
+    "test_002_update_store": {
+        "path": "/v1/merchant/stores/{}",
+        
+        "test_001_update_store_with_exist_name": {
+            "desc": "编辑门店-门店名重复",
+            "method": "put",
+            "params": {
+                "storeName": "分店名重复",
+                "cityCode": "440300",
+                "townCode": "440305",
+                "lat": 22.593232,
+                "lng": 114.004521,
+                "phone": "0755-666666",
+                "address": "南山智园12"
+            },
+            "check_res_code": "51102",
+            "check_res_data": "res.json().get('message') == '分店名重复'"
+        },
+        
+        "test_002_update_store": {
+            "desc": "编辑门店",
+            "method": "put",
+            "params": {
+                "storeName": "{}",
+                "cityCode": "440300",
+                "townCode": "440305",
+                "lat": 22.593232,
+                "lng": 114.004521,
+                "phone": "0755-666666",
+                "address": "南山智园12"
+            },
+            "check_res_code": "00",
+            "check_res_data": null
+        }
+    },
+
+    "test_003_store_info": {
+        "path": "/v1/merchant/stores/{}",
+        
+        "test_001_store_info": {
+            "desc": "获取门店详情",
+            "method": "get",
+            "check_res_code": "00",
+            "check_res_data": null
+        }
+    },
+    
+    "test_004_store_house": {
+        "path": "/v1/merchant/stores/{}/houses",
+        
+        "test_001_store_house": {
+            "desc": "查询门店房源列表",
+            "method": "get",
+            "check_res_code": "00",
+            "check_res_data": "res.json().get('data') != None"
+        }
+    },
+    
+    "test_005_user_by_store": {
+        "path": "/v1/merchant/stores/{}/users",
+        
+        "test_001_user_by_store": {
+            "desc": "查询门店下用户列表",
+            "method": "get",
+            "check_res_code": "00",
+            "check_res_data": null
+        }
+    },
+    
+    "test_006_store_list": {
+        "path": "/v1/merchant/stores",
+        
+        "test_common": {
+            "desc": "查询门店列表",
+            "method": "get",
+            "check_res_code": "00",
+            "check_res_data": "res.json().get('data') != None"
+        }
+    }
+}

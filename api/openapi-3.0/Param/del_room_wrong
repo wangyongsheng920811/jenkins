@@ -1,0 +1,4 @@
+['del_room-F-È±Ê§home_id', {'room_id': '5b96607f23cc5d63c6dda6b7'}]
+['del_room-F-È±Ê§room_id', {'home_id': '5b9f8ae2d7cf8916add1b89c'}]
+['del_room-F-´íÎóÔªËØhome_id=xxx', {'home_id': 'xxx', 'room_id': '5b96607f23cc5d63c6dda6b7'}]
+['del_room-F-´íÎóÔªËØroom_id=xxx', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'room_id': 'xxx'}]

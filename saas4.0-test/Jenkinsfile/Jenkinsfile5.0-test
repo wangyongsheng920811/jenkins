@@ -1,0 +1,38 @@
+pipeline
+{
+    agent { label 'saas4.0-qa' }  
+
+    options
+    {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '100', artifactNumToKeepStr: '10', daysToKeepStr: '100', numToKeepStr: '10'))
+        disableConcurrentBuilds()
+    }
+    
+    triggers {
+        cron('0 6,12,18 * * *')
+    }
+    
+    stages
+    {
+        stage('Deploy')
+        {
+            steps
+            {
+                script
+                {
+                    testUrl = "git@code.dding.net:server/lease-platform/saas4.0-test.git"
+                    testBranch = "master"
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'
+                    scripts.initParam()
+
+                    scripts.downloadCode(testUrl, testBranch, "code")
+
+                    sh "cd $env.WORKSPACE/code/AutoTest && python3 run.py"
+                    reportDir = "$env.WORKSPACE/code/AutoTest"
+                    reportName = "Hyperloop Test Report"
+                    scripts.reportHtml(reportDir, reportName)
+                }
+            }
+        }
+    }
+}

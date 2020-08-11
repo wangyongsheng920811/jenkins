@@ -1,0 +1,100 @@
+pipeline
+{
+    agent { label 'saas4.0-qa' }
+    
+    options
+    {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '100', artifactNumToKeepStr: '10', daysToKeepStr: '100', numToKeepStr: '10'))
+        disableConcurrentBuilds()
+    }
+    
+    parameters 
+    { 
+        booleanParam(name: 'pms_web', defaultValue: false, description: '') 
+        booleanParam(name: 'cms_web', defaultValue: false, description: '')
+        booleanParam(name: 'pms_api', defaultValue: false, description: '')
+        booleanParam(name: 'cms_api', defaultValue: false, description: '')
+        booleanParam(name: 'pms_migrate', defaultValue: false, description: '')
+    }
+
+    stages
+    {
+        stage('Build')
+        {
+            steps
+            {
+                script
+                {                                    
+                    if(params.pms_api)
+                    {
+                        sh " cd $env.WORKSPACE && rm -rf pms-api-code || echo 'no dir' "
+                        sh " cd $env.WORKSPACE && git clone -b master git@code.dding.net:server/lease-platform/pms-api.git pms-api-code && cd pms-api-code && sed -i 's/spring.profiles.active=test/spring.profiles.active=prod/'  ./src/main/resources/application.properties && rm release/qypms-boot.jar && mvn clean package -Dmaven.test.skip=true -Pprod && cp qypms-boot.jar release/ && cd release && git commit qypms-boot.jar -m 'Auto Push By Jenkins' && cd $env.WORKSPACE "
+                        sh ' cd pms-api-code && git tag -a build.$(date "+%Y%m%d%H%M") -m "线上环境" && git push origin && git push origin --tags '
+                    }
+                    
+                    if(params.cms_api)
+                    {
+                        sh " cd $env.WORKSPACE && rm -rf cms-api-code || echo 'no dir'"
+                        sh " cd $env.WORKSPACE && git clone -b master git@code.dding.net:server/lease-platform/cms-api.git cms-api-code && cd cms-api-code && sed -i 's/spring.profiles.active=test/spring.profiles.active=prod/'  ./src/main/resources/application.properties && rm release/qycms-boot.jar && mvn clean package -Dmaven.test.skip=true && cp qycms-boot.jar release/ && cd release && git commit qycms-boot.jar -m 'Auto Push By Jenkins' && cd $env.WORKSPACE "
+                        sh ' cd cms-api-code && git tag -a build.$(date "+%Y%m%d%H%M") -m "线上环境" && git push origin && git push origin --tags '
+                    }
+                    
+                    if(params.pms_migrate)
+                    {
+                        sh " cd $env.WORKSPACE && rm -rf pms-migrate-code || echo 'no dir' "
+                        sh " cd $env.WORKSPACE && git clone -b master git@code.dding.net:server/gongyu/pms-migrate.git pms-migrate-code && cd pms-migrate-code && rm release/pms-migrate.jar && mvn clean package -Dmaven.test.skip=true -Pprod && cp dist/pms-migrate.jar release/ && cd release && git commit pms-migrate.jar -m 'Auto Push By Jenkins' && cd $env.WORKSPACE "
+                        sh ' cd pms-migrate-code && git tag -a build.$(date "+%Y%m%d%H%M") -m "线上环境" && git push origin && git push origin --tags '
+                    }
+                }               
+            }
+        }
+
+        stage('Email')
+        {
+            steps
+            {
+                script
+                {
+                    pms_web = params.pms_web ? 'pms_web' : ''
+                    cms_web = params.cms_web ? 'cms_web' : ''
+                    pms_api = params.pms_api ? 'pms_api' : ''
+                    cms_api = params.cms_api ? 'cms_api' : ''
+                    pms_migrate = params.pms_migrate ? 'pms_migrate' : ''
+                    
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'
+                    url = 'git@code.dding.net:server/lease-platform/saas4.0-test.git'
+                    branch = 'master'
+                    scripts.initParam()
+                    scripts.downloadCode(url, branch, "test-code")
+                    wrap([$class: 'BuildUser'])
+                    {
+                        sh " python3 test-code/Script/auto_email.py $pms_web $cms_web $pms_api $cms_api $pms_migrate $BUILD_USER "  
+                    }
+                    
+                }
+            }
+        }
+    }
+    
+    post
+    {      
+        success
+        {   
+            script
+            {
+                if(params.pms_api)
+                {
+                    archiveArtifacts "pms-api-code/release/*.jar"                     
+                }
+                if(params.cms_api)
+                {
+                    archiveArtifacts "cms-api-code/release/*.jar"                     
+                }
+                if(params.pms_migrate)
+                {
+                    archiveArtifacts "pms-migrate-code/release/*.jar"                     
+                }
+            }
+        }
+    }
+}

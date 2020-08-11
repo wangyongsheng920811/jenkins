@@ -1,0 +1,1 @@
+['add_rooms-S-全部参数', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'rooms': [{'room_id': 'test', 'room_name': 'test', 'room_description': '测试', 'sp_state': '1', 'install_state': '1'}, {'dispensable': ['sp_state', 'install_state']}]}]

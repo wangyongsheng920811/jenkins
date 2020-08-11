@@ -1,0 +1,4 @@
+['elemeter_reset_by_collector-S-全部参数', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'uuid': 'f7d45c26288e809caa01aab349b28b68'}]
+['elemeter_reset_by_collector-S-缺失room_id', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'uuid': 'f7d45c26288e809caa01aab349b28b68'}]
+['elemeter_reset_by_collector-S-缺失uuid', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'room_id': '5b9f8ae2d7cf8916add1b89d'}]
+['elemeter_reset_by_collector-S-缺失全部非必须', {'home_id': '5b9f8ae2d7cf8916add1b89c'}]

@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  open-api:
+    image: "test-docker-hub.dding.net/saas/openapi:API_TAG"
+    ports:
+      - "RUN_PORT:7003"
+    dns:
+    - 10.202.72.116
+    - 10.202.72.118

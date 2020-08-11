@@ -1,0 +1,3 @@
+['get_home_info-F-´íÎóÔªËØhome_id=xxx', {'home_id': 'xxx', 'uuid': '3320e79de87067ce88e40724e5728ead', 'manufactory': 'ym'}]
+['get_home_info-F-´íÎóÔªËØuuid=xxx', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'uuid': 'xxx', 'manufactory': 'ym'}]
+['get_home_info-F-´íÎóÔªËØmanufactory=xxx', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'uuid': '3320e79de87067ce88e40724e5728ead', 'manufactory': 'xxx'}]

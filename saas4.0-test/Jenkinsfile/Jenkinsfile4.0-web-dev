@@ -1,0 +1,51 @@
+pipeline
+{
+    agent { label 'saas4.0-qa' }  
+    options
+    {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '100', artifactNumToKeepStr: '10', daysToKeepStr: '100', numToKeepStr: '10'))
+        disableConcurrentBuilds()
+    }
+    triggers {
+        gitlab(triggerOnPush: true, branchFilterType: "NameBasedFilter", includeBranchesSpec: "develop",)
+    }
+    parameters {
+        gitParameter name: 'branch', type: 'PT_BRANCH', defaultValue: 'develop', useRepository: '(?!.*saas4.0-test).*.git'
+    }
+
+    stages
+    {
+        stage('Deploy')
+        {
+            steps
+            {
+                script
+                {
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'
+                    scripts.initParam()
+                    branch = "develop"
+                    branch = (params.branch == "!No Git repository configured in SCM configuration") ? "develop" : params.branch 
+                    scripts.downloadCode(url, branch, "code")
+                    sh "cd code && $deployCommand"
+                    echo "$env.gitlabUserName"
+                    if("$env.gitlabUserName" != "null")
+                    {
+                        BUILD_USER = "$env.gitlabUserName"
+                    }
+                }
+            }
+        }
+    }
+    
+    post
+    {
+        always 
+        {
+            script
+            {
+                robotPath = "/root/jenkins/workspace/update-ddrobot-pipeline/DdRobot/Script/DdRobot.py"
+                scripts.notifyRobot(robotPath)
+            }
+        }
+    }
+}

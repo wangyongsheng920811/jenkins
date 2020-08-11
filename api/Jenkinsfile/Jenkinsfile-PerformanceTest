@@ -1,0 +1,77 @@
+pipeline
+{
+    agent { label 'performanceTest' }
+    
+    options
+    {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '100', artifactNumToKeepStr: '10', daysToKeepStr: '100', numToKeepStr: '10'))
+        disableConcurrentBuilds()     
+    }
+    parameters
+    {
+        booleanParam(name: 'saasapi', defaultValue: false, description: '预发布saasapi压力测试')
+        booleanParam(name: 'openapi', defaultValue: false, description: '预发布openapi压力测试')
+    }
+
+    stages
+    {             
+        stage('DownloadTestCode')
+        {
+            steps
+            {
+                script
+                {                    
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'                   
+                    gitUrl = "git@code.dding.net:yaosheng/api.git"
+                    branch = "master"
+                    dir = "test"
+                    deleteDir()
+                    scripts.downloadCode(gitUrl, branch, dir)
+                }
+            }
+        }
+                          
+        stage('RunPerformanceTest')
+        {
+            steps
+            {
+                script
+                {
+                    if (params.saasapi)
+                    {
+                        scripts.printColorLog("blue", "start run locust for saasapi")
+                        reportDir = "$env.WORKSPACE/test/PerformanceTest/StressTest/saasapi"
+                        sh "cd $reportDir && locust -f saasapi.py --no-web -r 45 -c 45 -t 10min --csv=report --only-summary || echo 'finish locust' "
+                        sh "cd $reportDir && python3 ../create_report.py saasapi"
+                        reportName = "SaaSAPI PerformanceTest Report"
+                        scripts.reportHtml(reportDir, reportName)
+                        scripts.checkPerformanceTestResult(reportDir)
+                    }
+                    
+                    if (params.openapi)
+                    {
+                        scripts.printColorLog("blue", "start run locust for openapi")
+                        reportDir = "$env.WORKSPACE/test/PerformanceTest/StressTest/openapi"
+                        sh "cd $reportDir && locust -f openapi.py --no-web -r 150 -c 150 -t 10min --csv=report --only-summary || echo 'finish locust' "
+                        sh "cd $reportDir && python3 ../create_report.py openapi"
+                        reportName = "OpenAPI PerformanceTest Report"
+                        scripts.reportHtml(reportDir, reportName)
+                        scripts.checkPerformanceTestResult(reportDir)
+                    }
+                }
+            }
+        }
+    }
+    
+    post
+    {            
+        always 
+        {
+            script
+            {
+                robotPath = "$env.WORKSPACE/test/Test/DdRobot.py"
+                scripts.notifyRobot(robotPath)
+            }
+        }
+    }
+}

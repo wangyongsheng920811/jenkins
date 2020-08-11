@@ -1,0 +1,6 @@
+['elemeter_update_max_capacity-F-È±Ê§home_id', {'room_id': '5b9f8ae2d7cf8916add1b89d', 'uuid': 'f7d45c26288e809caa01aab349b28b68', 'capacity': 10.1}]
+['elemeter_update_max_capacity-F-È±Ê§capacity', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'uuid': 'f7d45c26288e809caa01aab349b28b68'}]
+['elemeter_update_max_capacity-F-´íÎóÔªËØhome_id=xxx', {'home_id': 'xxx', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'uuid': 'f7d45c26288e809caa01aab349b28b68', 'capacity': 10.1}]
+['elemeter_update_max_capacity-F-´íÎóÔªËØroom_id=xxx', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'room_id': 'xxx', 'uuid': 'f7d45c26288e809caa01aab349b28b68', 'capacity': 10.1}]
+['elemeter_update_max_capacity-F-´íÎóÔªËØuuid=xxx', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'uuid': 'xxx', 'capacity': 10.1}]
+['elemeter_update_max_capacity-F-´íÎóÔªËØcapacity=xxx', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'uuid': 'f7d45c26288e809caa01aab349b28b68', 'capacity': 'xxx'}]

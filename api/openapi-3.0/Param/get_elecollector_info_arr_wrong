@@ -1,0 +1,3 @@
+['get_elecollector_info_arr-F-È±Ê§home_id', {'uuid': '2ded63bfad9b0472d2dcf2e209cbb74a'}]
+['get_elecollector_info_arr-F-´íÎóÔªËØhome_id=xxx', {'home_id': 'xxx', 'uuid': '2ded63bfad9b0472d2dcf2e209cbb74a'}]
+['get_elecollector_info_arr-F-´íÎóÔªËØuuid=xxx', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'uuid': 'xxx'}]

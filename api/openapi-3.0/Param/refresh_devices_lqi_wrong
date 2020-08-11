@@ -1,0 +1,6 @@
+['refresh_devices_lqi-F-È±Ê§home_id', {'type': '-1', 'uuids': ['43edb9bf9277c474eb670829105a017e', '3320e79de87067ce88e40724e5728ead']}]
+['refresh_devices_lqi-F-´íÎóÔªËØhome_id=xxx', {'home_id': 'xxx', 'type': '-1', 'uuids': ['43edb9bf9277c474eb670829105a017e', '3320e79de87067ce88e40724e5728ead']}]
+['refresh_devices_lqi-F-´íÎóÔªËØtype=7', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'type': '7', 'uuids': ['43edb9bf9277c474eb670829105a017e', '3320e79de87067ce88e40724e5728ead']}]
+['refresh_devices_lqi-F-´íÎóÔªËØtype=xxx', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'type': 'xxx', 'uuids': ['43edb9bf9277c474eb670829105a017e', '3320e79de87067ce88e40724e5728ead']}]
+["refresh_devices_lqi-F-´íÎóÔªËØuuids=['xxx']", {'home_id': '5b9f8ae2d7cf8916add1b89c', 'type': '-1', 'uuids': ['xxx']}]
+['refresh_devices_lqi-F-´íÎóÔªËØuuids=43edb9bf9277c474eb670829105a017e', {'home_id': '5b9f8ae2d7cf8916add1b89c', 'type': '-1', 'uuids': '43edb9bf9277c474eb670829105a017e'}]

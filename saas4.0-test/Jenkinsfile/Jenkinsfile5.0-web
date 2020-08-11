@@ -1,0 +1,41 @@
+pipeline
+{
+    agent { label 'saas4.0-qa' } 
+    
+    options
+    {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '100', artifactNumToKeepStr: '10', daysToKeepStr: '100', numToKeepStr: '10'))
+        disableConcurrentBuilds()
+    }
+
+    stages
+    {
+        stage('DownloadCode')
+        {
+            
+            steps
+            {
+                script
+                {
+                    branch = 'develop'
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'
+                    scripts.initParam()
+                    scripts.downloadCode(url, branch, "code")
+                    sh "cd $env.WORKSPACE/code && $deployCommand"
+                }
+            }
+        }
+    }
+    
+    post
+    {
+        always 
+        {
+            script
+            {
+                robotPath = "/root/jenkins/workspace/update-ddrobot-pipeline/DdRobot/Script/DdRobot.py"
+                scripts.notifyRobot(robotPath)
+            }
+        }
+    }
+}

@@ -1,0 +1,153 @@
+pipeline
+{
+    agent { label 'saas_api' } 
+    options
+    {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '100', artifactNumToKeepStr: '10', daysToKeepStr: '100', numToKeepStr: '10'))
+        disableConcurrentBuilds()     
+    }
+    parameters
+    {
+        string(defaultValue: 'f61ea77309e736545d099685dc2218e5', description: '门锁UUID', name: 'lock_uuid', trim: false)
+        string(defaultValue: 'e9f94c4b9902ae350b554e890718ad55', description: '网关UUID', name: 'center_uuid', trim: false) 
+        string(defaultValue: '3320e79de87067ce88e40724e5728ead', description: '电表UUID', name: 'elemeter_uuid', trim: false) 
+        choice(choices: ['门锁低电报警', '门锁电量恢复', '门锁防撬报警', '门锁电池电量同步', '门锁指纹被撬报警', '门锁密码连续错误次数大于5次', '硬件故障RTC', '硬件故障LED', '硬件故障FP', '硬件故障Touch', '设备时间有误', '门锁本地添加密码事件', '门锁本地清空蓝牙钥匙事件', '门锁本地删除密码事件', '门锁本地修改密码值事件', '门锁开锁事件', '门锁开门历史同步消息', '网关离线', '网关子设备离线', '网关恢复在线', '网关子设备恢复在线', '门锁被重置事件', '电表上传用电量', '电表上传用电历史', '超电量异常', '超功率异常', '电表超电量告警', '电表本地获取当前度数出现异常', '超电流异常', '门锁本地清空所有租客授权码', '门锁本地清空所有租客及管理员授权码', '电表本地合闸', '电表485通讯异常', '电表485通讯恢复正常', '电表跳闸', '电表合闸'], description: '', name: 'event_name')
+    }
+
+    stages
+    {               
+        stage('DownloadTestCode')
+        {
+            steps
+            {
+                echo "lock_uuid is: $params.lock_uuid"
+                echo "center_uuid is: $params.center_uuid"
+                echo "elemeter_uuid is: $params.elemeter_uuid"
+                echo "event_name is: $params.event_name"
+                script
+                {
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'                   
+                    gitUrl = "git@code.dding.net:yaosheng/api.git"
+                    branch = "master"
+                    dir = "test"
+                    deleteDir()
+                    scripts.downloadCode(gitUrl, branch, dir)
+                    
+                    switch(params.event_name)
+                    {
+                        case "门锁低电报警":
+                            event_name = 'batteryAlarm'
+                            break
+                        case "门锁电量恢复":
+                            event_name = 'clearBatteryAlarm'
+                            break
+                        case "门锁防撬报警":
+                            event_name = 'brokenAlarm'
+                            break
+                        case "门锁电池电量同步":
+                            event_name = 'batteryAsync'
+                            break
+                        case "门锁指纹被撬报警":
+                            event_name = 'fpBrokenAlarm'
+                            break
+                        case "门锁密码连续错误次数大于5次":
+                            event_name = 'wrongPwdAlarm'
+                            break                  
+                        case "硬件故障RTC":
+                            event_name = 'hwRTCAlarm'
+                            break
+                        case "硬件故障LED":
+                            event_name = 'hwLEDAlarm'
+                            break                 
+                        case "硬件故障FP":
+                            event_name = 'hwFpAlarm'
+                            break
+                        case "硬件故障Touch":
+                            event_name = 'hwTouchAlarm'
+                            break                       
+                        case "设备时间有误":
+                            event_name = 'rtcError'
+                            break
+                        case "门锁本地添加密码事件":
+                            event_name = 'pwdAddLocal'
+                            break           
+                        case "门锁本地清空蓝牙钥匙事件":
+                            event_name = 'bleReset'
+                            break
+                        case "门锁本地删除密码事件":
+                            event_name = 'pwdDelLocal'
+                            break                   
+                        case "门锁本地修改密码值事件":
+                            event_name = 'pwdUpdateLocal'
+                            break
+                        case "门锁开锁事件":
+                            event_name = 'lockerOpenAlarm'
+                            break                
+                        case "门锁开门历史同步消息":
+                            event_name = 'lockOpenHistoryAlarm'
+                            break
+                        case "网关离线":
+                            event_name = 'centerOfflineAlarm'
+                            break                       
+                        case "网关子设备离线":
+                            event_name = 'lockOfflineAlarm'
+                            break
+                        case "网关恢复在线":
+                            event_name = 'clearCenterOfflineAlarm'
+                            break                       
+                        case "网关子设备恢复在线":
+                            event_name = 'clearLockOfflineAlarm'
+                            break
+                        case "门锁被重置事件":
+                            event_name = 'lockerReset'
+                            break                   
+                        case "电表上传用电量":
+                            event_name = 'elemeterPowerAsync'
+                            break
+                        case "电表上传用电历史":
+                            event_name = 'elemeterPowerHisAsync'                                   
+                            break
+                        case "超电量异常":
+                            event_name = 'elemeterOvercomeAmount'
+                            break
+                        case "超功率异常":
+                            event_name = 'elemeterOvercomeCapacity'
+                            break                      
+                        case "电表超电量告警":
+                            event_name = 'elemeterOvercomeAmountWarn'
+                            break
+                        case "电表本地获取当前度数出现异常":
+                            event_name = 'elemeterWrongAmountWarn'
+                            break                       
+                        case "超电流异常":
+                            event_name = 'elemeterOvercomeCurrent'
+                            break
+                        case "门锁本地清空所有租客授权码":
+                            event_name = 'clearRenterAuthenCode'
+                            break                        
+                        case "门锁本地清空所有租客及管理员授权码":
+                            event_name = 'clearAllCommonAuthenCode'
+                            break
+                        case "电表本地合闸":
+                            event_name = 'elemeterLocalClose'
+                            break
+                        case "电表485通讯异常":
+                            event_name = 'elemeterTransError'
+                            break
+                        case "电表485通讯恢复正常":
+                            event_name = 'elemeterTransNormal'
+                            break
+                        case "电表跳闸":
+                            event_name = 'elemeterRemoteOpen'
+                            break
+                        case "电表合闸":
+                            event_name = 'elemeterRemoteClose'
+                            break
+                    }
+
+                    sh "python3 test/Test/pass_event_service.py $params.lock_uuid $params.center_uuid $params.elemeter_uuid $event_name"
+               }
+            }
+        }  
+    } 
+}

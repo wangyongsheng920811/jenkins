@@ -1,0 +1,5 @@
+['watermeter_charge-S-全部参数', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'meter_type': 1, 'room_id': '5b9f8ae2d7cf8916add1b89d', 'amount': 100}]
+['watermeter_charge-S-缺失uuid', {'meter_type': 1, 'room_id': '5b9f8ae2d7cf8916add1b89d', 'amount': 100}]
+['watermeter_charge-S-缺失meter_type', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'amount': 100}]
+['watermeter_charge-S-缺失room_id', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'meter_type': 1, 'amount': 100}]
+['watermeter_charge-S-缺失全部非必须', {'amount': 100}]

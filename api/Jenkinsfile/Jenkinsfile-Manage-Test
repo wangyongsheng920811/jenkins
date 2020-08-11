@@ -1,0 +1,59 @@
+pipeline
+{
+    agent { label 'saas_api' }
+    
+    options
+    {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '100', artifactNumToKeepStr: '10', daysToKeepStr: '100', numToKeepStr: '10'))
+        disableConcurrentBuilds()     
+    }
+    triggers 
+    {
+       upstream (threshold: hudson.model.Result.SUCCESS, upstreamProjects: 'saas-manage-pipeline')
+    }
+
+    stages
+    {             
+        stage('DownloadTestCode')
+        {
+            steps
+            {
+                script
+                {                    
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'                   
+                    gitUrl = "git@code.dding.net:yaosheng/saas_manage_autotest.git"
+                    branch = "master"
+                    dir = "test"
+                    deleteDir()
+                    scripts.downloadCode(gitUrl, branch, dir)
+                }
+            }
+        }
+                          
+        stage('RunTestCase')
+        {
+            steps
+            {
+                script
+                {
+                    sh "cd $env.WORKSPACE/test && python3 -u run.py"
+                    reportDir = "$env.WORKSPACE/test"
+                    reportName = "ManageApi Test Report"
+                    scripts.reportHtml(reportDir, reportName)
+                }
+            }
+        }
+    }
+    
+    post
+    {            
+        always 
+        {
+            script
+            {
+                robotPath = "/home/Jenkins/workspace/update_ddrobot/DdRobot/Test/DdRobot.py"
+                scripts.notifyRobot(robotPath)
+            }
+        }
+    }
+}

@@ -1,0 +1,5 @@
+['set_room_pay_type-S-全部参数', {'room_id': '5b9f8ae2d7cf8916add1b89e', 'uuid': '3320e79de87067ce88e40724e5728ead', 'pay_type': 1, 'overdraft': 5}]
+['set_room_pay_type-S-缺失room_id', {'uuid': '3320e79de87067ce88e40724e5728ead', 'pay_type': 1, 'overdraft': 5}]
+['set_room_pay_type-S-缺失uuid', {'room_id': '5b9f8ae2d7cf8916add1b89e', 'pay_type': 1, 'overdraft': 5}]
+['set_room_pay_type-S-缺失overdraft', {'room_id': '5b9f8ae2d7cf8916add1b89e', 'uuid': '3320e79de87067ce88e40724e5728ead', 'pay_type': 1}]
+['set_room_pay_type-S-缺失全部非必须', {'pay_type': 1}]

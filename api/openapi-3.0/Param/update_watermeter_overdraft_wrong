@@ -1,0 +1,7 @@
+['update_watermeter_overdraft-F-È±Ê§overdraft', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'meter_type': 1}]
+['update_watermeter_overdraft-F-´íÎóÔªËØuuid=xxx', {'uuid': 'xxx', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'meter_type': 1, 'overdraft': 1000}]
+['update_watermeter_overdraft-F-´íÎóÔªËØroom_id=xxx', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'room_id': 'xxx', 'meter_type': 1, 'overdraft': 1000}]
+['update_watermeter_overdraft-F-´íÎóÔªËØmeter_type=0', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'meter_type': 0, 'overdraft': 1000}]
+['update_watermeter_overdraft-F-´íÎóÔªËØmeter_type=xxx', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'meter_type': 'xxx', 'overdraft': 1000}]
+['update_watermeter_overdraft-F-´íÎóÔªËØoverdraft=10000', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'meter_type': 1, 'overdraft': 10000}]
+['update_watermeter_overdraft-F-´íÎóÔªËØoverdraft=xxx', {'uuid': '5a39d93ec0ef01e7a42559475592570a', 'room_id': '5b9f8ae2d7cf8916add1b89d', 'meter_type': 1, 'overdraft': 'xxx'}]

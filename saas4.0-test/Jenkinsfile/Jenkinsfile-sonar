@@ -1,0 +1,56 @@
+pipeline
+{
+    agent { label 'saas4.0-qa' } 
+    
+    options
+    {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '100', artifactNumToKeepStr: '10', daysToKeepStr: '100', numToKeepStr: '10'))
+        disableConcurrentBuilds()
+    }
+    
+    triggers 
+    {
+       cron('0 6 * * *')
+    }
+    
+    stages
+    {
+        stage('DownloadCode')
+        {           
+            steps
+            {
+                script
+                {
+                    hyperloop_web_partner_url = 'git@code.dding.net:server/lease-platform/Web/hyperloop-web-partner.git'
+                    hyperloop_api_url = 'git@code.dding.net:server/lease-platform/hyperloop-api.git'
+                    test_url = 'git@code.dding.net:server/lease-platform/saas4.0-test.git'
+                    
+                    scripts = load 'Jenkinsfile/Jenkinsfile/JenkinsfileScript'
+                    
+                    scripts.downloadCode(hyperloop_web_partner_url, "develop", "hyperloop-web-partner")
+                    scripts.downloadCode(hyperloop_api_url, "master", "hyperloop-api")
+                    scripts.downloadCode(test_url, "master", "test_code")
+                }
+            }
+        }
+        
+        stage('CheckStyle')
+        {            
+            steps
+            {
+                script
+                {
+                    withSonarQubeEnv('SonarQube')
+                    {
+                        sh 'cp test_code/Script/sonar/hyperloop-web-partner.properties hyperloop-web-partner/sonar-project.properties && cd hyperloop-web-partner && sonar-scanner -Dsonar.login=74e21d437e4293a7473d1d361c8e4c39578e5051'                  
+                    }  
+                    
+                    withSonarQubeEnv('SonarQube')
+                    {
+                        sh 'cd hyperloop-api && mvn clean package  -Dmaven.test.skip=true sonar:sonar'                  
+                    }
+                }
+            }
+        }
+    }
+}
